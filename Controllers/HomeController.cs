@@ -14,6 +14,7 @@ namespace LibrarySystem99.Controllers
         public ActionResult Index()
         {
             // checking whether the role exists, if not create a new role
+            // here i have added this line to test the git commit and push functionality
             var context = new ApplicationDbContext();
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
 
