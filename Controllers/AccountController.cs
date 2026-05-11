@@ -201,22 +201,26 @@ namespace LibrarySystem99.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult ForgotPassword(ForgotPasswordViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(model);
+
+            try
             {
-                var user = UserManager.FindByEmail(model.Email);
+                var user = UserManager.Users
+                    .FirstOrDefault(u => u.Email == model.Email);
+
                 if (user == null)
-                {
-                    // Email not found - send to confirmation page anyway (security: don't reveal which emails exist)
                     return View("ForgotPasswordConfirmation");
-                }
 
-                // User exists - generate a reset token and redirect straight to ResetPassword page
                 string code = UserManager.GeneratePasswordResetToken(user.Id);
-                return RedirectToAction("ResetPassword", "Account", new { userId = user.Id, code = code });
-            }
 
-            // If we got this far, something failed, redisplay form
-            return View(model);
+                return RedirectToAction("ResetPassword", new { userId = user.Id, code = code });
+            }
+            catch
+            {
+                ModelState.AddModelError("", "System busy. Try again.");
+                return View(model);
+            }
         }
 
         //

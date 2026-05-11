@@ -20,6 +20,13 @@ namespace LibrarySystem99.Models
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
+
+        public DbSet<Book> Books { get; set; }
+        public DbSet<BorrowingTransaction> BorrowingTransactions { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<Fine> Fines { get; set; }
+        public DbSet<BorrowingPolicy> BorrowingPolicies { get; set; }
+
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
@@ -29,5 +36,6 @@ namespace LibrarySystem99.Models
         {
             return new ApplicationDbContext();
         }
+
     }
 }
