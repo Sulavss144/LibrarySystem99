@@ -30,6 +30,18 @@
                 @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
             </div>
         </div>
+        <!-- added new dropdown option -->
+        <div class="row">
+            @Html.LabelFor(m => m.SelectedRole, new { @class = "col-md-2 control-label" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(m => m.SelectedRole, new List<SelectListItem>
+                {
+                    new SelectListItem { Text = "Member", Value = "Member" },
+                    new SelectListItem { Text = "Librarian", Value = "Librarian" }
+                },
+                new { @class = "form-control" })
+            </div>
+        </div>
         <div class="row">
             <div class="offset-md-2 col-md-10">
                 <input type="submit" value="Register" class="btn btn-outline-dark" />
