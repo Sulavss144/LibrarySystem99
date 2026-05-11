@@ -9,6 +9,7 @@ using LibrarySystem99.Models;
 
 namespace LibrarySystem99.Controllers
 {
+    [Authorize]
     public class BooksController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
@@ -33,12 +34,14 @@ namespace LibrarySystem99.Controllers
         }
 
         // GET: Create
+        [Authorize(Roles = "Librarian")]
         public ActionResult Create()
         {
             return View();
         }
 
         // POST: Create
+        [Authorize(Roles = "Librarian")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include =
@@ -55,6 +58,7 @@ namespace LibrarySystem99.Controllers
         }
 
         // GET: Edit
+        [Authorize(Roles = "Librarian")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -68,6 +72,7 @@ namespace LibrarySystem99.Controllers
         }
 
         // POST: Edit
+        [Authorize(Roles = "Librarian")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Book book)
@@ -82,6 +87,7 @@ namespace LibrarySystem99.Controllers
         }
 
         // GET: Delete
+        [Authorize(Roles = "Librarian")]
         public ActionResult Delete(int? id)
         {
             var book = db.Books.Find(id);
@@ -92,6 +98,7 @@ namespace LibrarySystem99.Controllers
         }
 
         // POST: Delete
+        [Authorize(Roles = "Librarian")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -106,7 +113,7 @@ namespace LibrarySystem99.Controllers
         // 🔥 BORROW BOOK SYSTEM (NEW)
         // =========================================
 
-        [Authorize]
+        [Authorize(Roles = "Member")]
         public ActionResult Borrow(int id)
         {
             var book = db.Books.Find(id);
@@ -144,7 +151,7 @@ namespace LibrarySystem99.Controllers
         // 🔥 USER BORROWED BOOKS
         // =========================================
 
-        [Authorize]
+        [Authorize(Roles = "Member")]
         public ActionResult MyBooks()
         {
             var userId = User.Identity.GetUserId();
@@ -161,7 +168,7 @@ namespace LibrarySystem99.Controllers
         // 🔥 RETURN BOOK SYSTEM
         // =========================================
 
-        [Authorize]
+        [Authorize(Roles = "Member")]
         public ActionResult Return(int id)
         {
             var borrow = db.BorrowingTransactions
