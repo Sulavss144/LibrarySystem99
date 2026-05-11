@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using LibrarySystem99.Models;
 
 namespace LibrarySystem99.Controllers
@@ -20,65 +19,58 @@ namespace LibrarySystem99.Controllers
             return View(db.Books.ToList());
         }
 
-        // GET: Books/Details/5
+        // GET: Details
         public ActionResult Details(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Book book = db.Books.Find(id);
+
+            var book = db.Books.Find(id);
             if (book == null)
-            {
                 return HttpNotFound();
-            }
+
             return View(book);
         }
 
-        // GET: Books/Create
+        // GET: Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Books/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Title,Author,ISBN,Category,TotalCopies,AvailableCopies,Description")] Book book)
+        public ActionResult Create([Bind(Include =
+            "Id,Title,Author,ISBN,Category,TotalCopies,AvailableCopies,Description")] Book book)
         {
             if (ModelState.IsValid)
             {
+                book.AvailableCopies = book.TotalCopies;
                 db.Books.Add(book);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
             return View(book);
         }
 
-        // GET: Books/Edit/5
+        // GET: Edit
         public ActionResult Edit(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Book book = db.Books.Find(id);
+
+            var book = db.Books.Find(id);
             if (book == null)
-            {
                 return HttpNotFound();
-            }
+
             return View(book);
         }
 
-        // POST: Books/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Title,Author,ISBN,Category,TotalCopies,AvailableCopies,Description")] Book book)
+        public ActionResult Edit(Book book)
         {
             if (ModelState.IsValid)
             {
@@ -89,38 +81,114 @@ namespace LibrarySystem99.Controllers
             return View(book);
         }
 
-        // GET: Books/Delete/5
+        // GET: Delete
         public ActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Book book = db.Books.Find(id);
+            var book = db.Books.Find(id);
             if (book == null)
-            {
                 return HttpNotFound();
-            }
+
             return View(book);
         }
 
-        // POST: Books/Delete/5
+        // POST: Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Book book = db.Books.Find(id);
+            var book = db.Books.Find(id);
             db.Books.Remove(book);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
 
+        // =========================================
+        // 🔥 BORROW BOOK SYSTEM (NEW)
+        // =========================================
+
+        [Authorize]
+        public ActionResult Borrow(int id)
+        {
+            var book = db.Books.Find(id);
+
+            if (book == null)
+                return HttpNotFound();
+
+            if (book.AvailableCopies <= 0)
+            {
+                TempData["Error"] = "No copies available!";
+                return RedirectToAction("Index");
+            }
+
+            var userId = User.Identity.GetUserId();
+
+            var borrow = new BorrowingTransaction
+            {
+                BookId = book.Id,
+                UserId = userId,
+                BorrowDate = DateTime.Now,
+                DueDate = DateTime.Now.AddDays(14),
+                IsReturned = false,
+                RenewalCount = 0
+            };
+
+            book.AvailableCopies--;
+
+            db.BorrowingTransactions.Add(borrow);
+            db.SaveChanges();
+
+            return RedirectToAction("MyBooks");
+        }
+
+        // =========================================
+        // 🔥 USER BORROWED BOOKS
+        // =========================================
+
+        [Authorize]
+        public ActionResult MyBooks()
+        {
+            var userId = User.Identity.GetUserId();
+
+            var books = db.BorrowingTransactions
+                .Include(b => b.Book)
+                .Where(b => b.UserId == userId && !b.IsReturned)
+                .ToList();
+
+            return View(books);
+        }
+
+        // =========================================
+        // 🔥 RETURN BOOK SYSTEM
+        // =========================================
+
+        [Authorize]
+        public ActionResult Return(int id)
+        {
+            var borrow = db.BorrowingTransactions
+                .Include(b => b.Book)
+                .FirstOrDefault(b => b.Id == id);
+
+            if (borrow == null)
+                return HttpNotFound();
+
+            if (!borrow.IsReturned)
+            {
+                borrow.IsReturned = true;
+                borrow.ReturnDate = DateTime.Now;
+
+                borrow.Book.AvailableCopies++;
+            }
+
+            db.SaveChanges();
+
+            return RedirectToAction("MyBooks");
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 db.Dispose();
-            }
+
             base.Dispose(disposing);
         }
     }

@@ -73,24 +73,45 @@ namespace LibrarySystem99.Controllers
                 return View(model);
             }
 
-            // This doesn't count login failures towards account lockout
-            // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            // Try login
+            var result = await SignInManager.PasswordSignInAsync(
+                model.Email,
+                model.Password,
+                model.RememberMe,
+                shouldLockout: false
+            );
+
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+
+                    // Get user after login
+                    var user = await UserManager.FindByEmailAsync(model.Email);
+
+                    if (user != null && await UserManager.IsInRoleAsync(user.Id, "Librarian"))
+                    {
+                        return RedirectToAction("Index", "Librarian");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Member");
+                    }
+
                 case SignInStatus.LockedOut:
                     return View("Lockout");
+
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    return RedirectToAction(
+                        "SendCode",
+                        new { ReturnUrl = returnUrl, RememberMe = model.RememberMe }
+                    );
+
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
             }
         }
-
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]

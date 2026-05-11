@@ -1,0 +1,58 @@
+﻿@model IEnumerable<LibrarySystem99.Models.BorrowingTransaction>
+
+<h2>Librarian Dashboard</h2>
+
+<div style="display:flex; gap:30px;">
+    <div>
+        <h4>Total Books</h4>
+        <h2>@ViewBag.TotalBooks</h2>
+    </div>
+
+    <div>
+        <h4>Active Borrows</h4>
+        <h2>@ViewBag.ActiveBorrows</h2>
+    </div>
+
+    <div>
+        <h4>Overdue Books</h4>
+        <h2 style="color:red">@ViewBag.OverdueBooks</h2>
+    </div>
+</div>
+
+<hr />
+
+<h3>Recent Borrow Activity</h3>
+
+<table class="table">
+    <tr>
+        <th>Book</th>
+        <th>User</th>
+        <th>Borrow Date</th>
+        <th>Due Date</th>
+        <th>Status</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Book.Title</td>
+            <td>@item.User.Email</td>
+            <td>@item.BorrowDate</td>
+            <td>@item.DueDate</td>
+            <td>
+                @if (item.IsReturned)
+                {
+                    <span style="color:green">Returned</span>
+                }
+                else if (item.DueDate < DateTime.Now)
+                {
+                    <span style="color:red">Overdue</span>
+                }
+                else
+                {
+                    <span style="color:orange">Active</span>
+                }
+            </td>
+        </tr>
+    }
+</table>

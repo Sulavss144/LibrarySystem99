@@ -1,0 +1,42 @@
+﻿@model IEnumerable<LibrarySystem99.Models.BorrowingTransaction>
+
+<h2>My Borrowed Books</h2>
+
+<table class="table">
+    <tr>
+        <th>Book</th>
+        <th>Borrow Date</th>
+        <th>Due Date</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Book.Title</td>
+            <td>@item.BorrowDate</td>
+            <td>@item.DueDate</td>
+            <td>
+                @if (item.IsReturned)
+                {
+                    <span style="color:green">Returned</span>
+                }
+                else if (item.DueDate < DateTime.Now)
+                {
+                    <span style="color:red">Overdue</span>
+                }
+                else
+                {
+                    <span style="color:blue">Active</span>
+                }
+            </td>
+            <td>
+                @if (!item.IsReturned)
+                {
+                    @Html.ActionLink("Return", "Return", "BorrowingTransactions", new { id = item.Id }, new { @class = "btn btn-warning" })
+                }
+            </td>
+        </tr>
+    }
+</table>
