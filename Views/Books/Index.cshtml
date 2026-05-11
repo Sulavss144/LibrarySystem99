@@ -1,15 +1,21 @@
-﻿@model IEnumerable<LibrarySystem99.Models.Book>
+﻿
+@model IEnumerable<LibrarySystem99.Models.Book>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Books";
 }
 
-<h2>Index</h2>
+<h2>Books</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @if (User.IsInRole("Librarian"))
+    {
+        @Html.ActionLink("Create New", "Create", null,
+            new { @class = "btn btn-primary" })
+    }
 </p>
-<table class="table">
+
+<table class="table table-bordered">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Title)
@@ -32,57 +38,86 @@
         <th>
             @Html.DisplayNameFor(model => model.Description)
         </th>
-        <th></th>
+        <th>
+            Actions
+        </th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Author)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ISBN)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Category)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TotalCopies)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AvailableCopies)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Description)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
 
-            @using (Html.BeginForm("Borrow", "BorrowingTransactions"))
-            {
-                @Html.Hidden("bookId", item.Id)
+            <td>
+                @Html.DisplayFor(modelItem => item.Author)
+            </td>
 
-                if (item.AvailableCopies > 0)
+            <td>
+                @Html.DisplayFor(modelItem => item.ISBN)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Category)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalCopies)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.AvailableCopies)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+
+            <td>
+
+                @Html.ActionLink("Details", "Details",
+                    new { id = item.Id },
+                    new { @class = "btn btn-info btn-sm" })
+
+                <!-- Librarian Only -->
+                @if (User.IsInRole("Librarian"))
                 {
-                    <button type="submit" class="btn btn-primary btn-sm">
-                        Borrow
-                    </button>
+                    @Html.Raw(" ")
+
+                    @Html.ActionLink("Edit", "Edit",
+                        new { id = item.Id },
+                        new { @class = "btn btn-warning btn-sm" })
+
+                    @Html.Raw(" ")
+
+                    @Html.ActionLink("Delete", "Delete",
+                        new { id = item.Id },
+                        new { @class = "btn btn-danger btn-sm" })
                 }
-                else
+
+                <!-- Member Only -->
+                @if (User.IsInRole("Member"))
                 {
-                    <span class="text-danger">Not Available</span>
+                    @Html.Raw(" ")
+
+                    if (item.AvailableCopies > 0)
+                    {
+                        @Html.ActionLink("Borrow", "Borrow",
+                            new { id = item.Id },
+                            new { @class = "btn btn-success btn-sm" })
+                    }
+                    else
+                    {
+                        <span class="text-danger">
+                            Not Available
+                        </span>
+                    }
                 }
-            }
-        </td>
-        <td>
-            @Html.ActionLink("Borrow", "Borrow", new { id = item.Id }, new { @class = "btn btn-success" })
-        </td>
-    </tr>
-}
+
+            </td>
+        </tr>
+    }
 
 </table>
+```
