@@ -1,0 +1,34 @@
+﻿@{
+    ViewBag.Title = "Member Dashboard";
+}
+
+<div class="container">
+    <div class="jumbotron">
+        <h1>Member Dashboard</h1>
+        <p class="lead">Welcome back, @User.Identity.Name. Ready to find your next read?</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <h3>Browse Books</h3>
+            <p>Explore the library catalogue, search by title or author, and find your next book.</p>
+            <p><a class="btn btn-default" href="#">Browse Catalogue &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h3>My Borrowings</h3>
+            <p>View books you've currently borrowed, check due dates, and return books online.</p>
+            <p><a class="btn btn-default" href="#">My Borrowings &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h3>My Profile</h3>
+            <p>Update your personal details, change your password, and manage your account.</p>
+            <p><a class="btn btn-default" href="#">View Profile &raquo;</a></p>
+        </div>
+    </div>
+
+    <hr />
+    <p class="text-muted">
+        <strong>Security note:</strong> This page is protected by <code>[Authorize(Roles = "Member")]</code>.
+        Only users with the Member role can access it. Librarians attempting to reach this URL directly will be redirected to login.
+    </p>
+</div>
