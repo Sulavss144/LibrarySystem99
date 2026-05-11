@@ -1,0 +1,34 @@
+﻿@{
+    ViewBag.Title = "Librarian Dashboard";
+}
+
+<div class="container">
+    <div class="jumbotron">
+        <h1>Librarian Dashboard</h1>
+        <p class="lead">Welcome, @User.Identity.Name. You have full library management access.</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <h3>Books Management</h3>
+            <p>Add new books to the catalogue, edit existing entries, and remove outdated titles.</p>
+            <p><a class="btn btn-default" href="#">Manage Books &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h3>Member Management</h3>
+            <p>View all registered members, manage accounts, and monitor borrowing activity.</p>
+            <p><a class="btn btn-default" href="#">View Members &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h3>Reports</h3>
+            <p>View borrowing statistics, overdue books, and library usage reports.</p>
+            <p><a class="btn btn-default" href="#">View Reports &raquo;</a></p>
+        </div>
+    </div>
+
+    <hr />
+    <p class="text-muted">
+        <strong>Security note:</strong> This page is protected by <code>[Authorize(Roles = "Librarian")]</code>.
+        Only users with the Librarian role can access it. Members attempting to reach this URL directly will be redirected to login.
+    </p>
+</div>

@@ -43,5 +43,19 @@ namespace LibrarySystem99.Controllers
 
             return View();
         }
+
+        // GET: /Home/LibrarianDashboard
+        [Authorize(Roles = "Librarian")]
+        public ActionResult LibrarianDashboard()
+        {
+            return View();
+        }
+
+        // GET: /Home/MemberDashboard
+        [Authorize(Roles = "Member")]
+        public ActionResult MemberDashboard()
+        {
+            return View();
+        }
     }
 }
