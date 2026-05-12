@@ -29,6 +29,29 @@ textarea {
     border: 1px solid #ccc;
     padding: 8px;
 }
+/* ===== USER NAV ===== */
+
+.user-nav {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+    .user-nav li {
+        list-style: none;
+    }
+
+    .user-nav a {
+        color: white !important;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 8px 12px;
+    }
+
+        .user-nav a:hover {
+            color: #b7ff8a !important;
+        }
 
 .btn {
     border-radius: 6px;
