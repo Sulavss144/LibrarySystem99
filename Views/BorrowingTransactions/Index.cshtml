@@ -15,7 +15,7 @@
             @Html.DisplayNameFor(model => model.BookId)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.UserId)
+            User
         </th>
         <th>
             @Html.DisplayNameFor(model => model.BorrowDate)
@@ -41,7 +41,7 @@
             @Html.DisplayFor(modelItem => item.BookId)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.UserId)
+            @item.User.UserName
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.BorrowDate)
@@ -59,10 +59,21 @@
             @Html.DisplayFor(modelItem => item.RenewalCount)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-            @Html.ActionLink("Return", "Return", new { id = item.Id })
+       
+            @if (User.IsInRole("Librarian"))
+            {
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) <text> | </text>
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }) <text> | </text>
+            }
+
+            @Html.ActionLink("Details", "Details", new { id = item.Id })
+
+            @if (User.IsInRole("Member") || User.IsInRole("Librarian"))
+            {
+                <text> | </text>
+                @Html.ActionLink("Return", "Return", new { id = item.Id })
+            }
+       
         </td>
     </tr>
 }
