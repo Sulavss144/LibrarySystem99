@@ -1,19 +1,40 @@
-﻿@{
+﻿
+@{
     ViewBag.Title = "Contact";
 }
-<main aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title.</h2>
-    <h3>@ViewBag.Message</h3>
 
-    <address>
-        One Microsoft Way<br />
-        Redmond, WA 98052-6399<br />
-        <abbr title="Phone">P:</abbr>
-        425.555.0100
-    </address>
+<main class="contact-page">
 
-    <address>
-        <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-        <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-    </address>
+    <h1 class="page-title">Contact Us</h1>
+    <p class="page-subtitle">
+        Get in touch with the Library Management System team.
+    </p>
+
+    <div class="contact-grid">
+
+        <div class="contact-card">
+            <h3>Address</h3>
+            <p>
+                KOI Institute <br />
+                Sydney, Australia
+            </p>
+        </div>
+
+        <div class="contact-card">
+            <h3>Email</h3>
+            <p>librarykoi@example.com</p>
+        </div>
+
+        <div class="contact-card">
+            <h3>Phone</h3>
+            <p>+61 400 123 456</p>
+        </div>
+
+        <div class="contact-card">
+            <h3>Support Hours</h3>
+            <p>Monday – Friday <br /> 9:00 AM – 5:00 PM</p>
+        </div>
+
+    </div>
+
 </main>

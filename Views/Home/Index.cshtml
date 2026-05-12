@@ -1,33 +1,31 @@
-﻿@{
+﻿
+@{
     ViewBag.Title = "Home Page";
 }
 
 <main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">KOI Library</h1>
-        <p class="lead">free web framework for building great Web sites and Web applications.</p>
-        <p><a href="https://asp.net" class="btn btn-primary btn-md">Learn more &raquo;</a></p>
+    <section class="hero-section">
+        <h1>Library Management System</h1>
+        <p class="lead">
+            A simple web-based system for managing books, members, librarians, and borrowing activities.
+        </p>
+        <a href="/Account/Register" class="btn btn-primary">Get Started</a>
     </section>
 
-    <div class="row">
-        <section class="col-md-4" aria-labelledby="gettingStartedTitle">
-            <h2 id="gettingStartedTitle">Getting started</h2>
-            <p>
-                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-                enables a clean separation of concerns and gives you full control over markup
-                for enjoyable, agile development.
-            </p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+    <div class="row feature-section">
+        <section class="col-md-4">
+            <h2>Book Management</h2>
+            <p>Add, update, search, and manage library book records efficiently.</p>
         </section>
-        <section class="col-md-4" aria-labelledby="librariesTitle">
-            <h2 id="librariesTitle">Get more libraries</h2>
-            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+
+        <section class="col-md-4">
+            <h2>Member Access</h2>
+            <p>Members can register, log in, and access library-related services.</p>
         </section>
-        <section class="col-md-4" aria-labelledby="hostingTitle">
-            <h2 id="hostingTitle">Web Hosting</h2>
-            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+
+        <section class="col-md-4">
+            <h2>Librarian Dashboard</h2>
+            <p>Librarians can manage library operations through a role-based dashboard.</p>
         </section>
     </div>
 </main>
