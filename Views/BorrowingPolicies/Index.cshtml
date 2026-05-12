@@ -1,0 +1,58 @@
+﻿@model IEnumerable<LibrarySystem99.Models.BorrowingPolicy>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @if (User.IsInRole("Librarian"))
+    {
+        @Html.ActionLink("Create New", "Create")
+    }
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.MaxBooksPerUser)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BorrowDays)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MaxRenewals)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FinePerDay)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.MaxBooksPerUser)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BorrowDays)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MaxRenewals)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FinePerDay)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+            @if (User.IsInRole("Librarian"))
+            {
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) 
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            }
+
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,66 @@
+﻿@model IEnumerable<LibrarySystem99.Models.Fine>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @if (User.IsInRole("Librarian"))
+    {
+        @Html.ActionLink("Create New", "Create")
+    }
+    </p>
+<table class="table">
+    <tr>
+        
+        <th>User</th>
+       
+        <th>
+            @Html.DisplayNameFor(model => model.Amount)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsPaid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CreatedDate)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+      <td>
+          @item.BorrowingTransaction.User.UserName
+      </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Amount)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsPaid)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CreatedDate)
+        </td>
+        
+        <td>
+            @if (User.IsInRole("Librarian"))
+            {
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) <text> | </text>
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }) <text> | </text>
+            }
+
+            @Html.ActionLink("Details", "Details", new { id = item.Id })
+
+            @if ((User.IsInRole("Member") || User.IsInRole("Librarian")) && !item.IsPaid)
+            {
+                <text> | </text>
+                @Html.ActionLink("Pay", "Pay", new { id = item.Id })
+            }
+        </td>
+        
+    </tr>
+}
+
+</table>

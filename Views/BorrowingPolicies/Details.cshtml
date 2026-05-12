@@ -1,0 +1,50 @@
+﻿@model LibrarySystem99.Models.BorrowingPolicy
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>BorrowingPolicy</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.MaxBooksPerUser)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaxBooksPerUser)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BorrowDays)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BorrowDays)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MaxRenewals)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaxRenewals)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FinePerDay)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FinePerDay)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
