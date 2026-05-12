@@ -173,6 +173,22 @@ form {
         margin-bottom: 15px;
         color: #2f6b2f;
     }
+.container {
+    max-width: 1200px;
+}
+.footer-custom {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #ccc;
+    color: #666;
+}
+section {
+    margin-bottom: 30px;
+}
+p {
+    line-height: 1.8;
+}
 /* ===== ABOUT PAGE ===== */
 
 .about-page {
@@ -187,7 +203,63 @@ form {
         max-width: 800px;
         line-height: 1.8;
     }
+.auth-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 15px;
+}
 
+.auth-btn {
+    width: 100%;
+    background: #56ab2f;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+}
+
+    .auth-btn:hover {
+        background: #469126;
+        color: white;
+    }
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+    .auth-header h2 {
+        color: #2f6b2f;
+        font-weight: 700;
+    }
+
+    .auth-header p {
+        color: #555;
+        font-size: 15px;
+    }
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+    .form-group label {
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+
+.auth-btn {
+    width: 100%;
+    background: linear-gradient(to right, #56ab2f, #a8e063);
+    color: white;
+    margin-top: 10px;
+}
+
+    .auth-btn:hover {
+        background: linear-gradient(to right, #4c9a2a, #8fd14f);
+        color: white;
+    }
 /* ===== FEATURE CARDS ===== */
 
 .about-features {
@@ -208,7 +280,26 @@ form {
         color: #2f6b2f;
         margin-bottom: 15px;
     }
+.auth-links {
+    margin-top: 15px;
+    text-align: center;
+}
 
+    .auth-links a {
+        color: #2f6b2f;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+        .auth-links a:hover {
+            text-decoration: underline;
+        }
+
+.remember-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
 /* ===== RECOMMENDATIONS ===== */
 
 .recommendation-section h2 {

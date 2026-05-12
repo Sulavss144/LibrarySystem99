@@ -2,54 +2,46 @@
 @{
     ViewBag.Title = "Register";
 }
+<main class="auth-page">
+    <div class="auth-card">
 
-<main aria-labelledby="title">
-    <h2 class="text-center mb-4">Create Account</h2>
+        <div class="auth-header">
+            <h2>Create Account</h2>
+            <p>Register as a member or librarian to access the LibraryKOI system.</p>
+        </div>
 
-    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
-    {
-        @Html.AntiForgeryToken()
-        <h4>Create a new account.</h4>
-        <hr />
-        @Html.ValidationSummary("", new { @class = "text-danger" })
-        <div class="row">
-            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Email)
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Enter your email" })
             </div>
-        </div>
-        <div class="row">
-            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-10">
-                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Password)
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "Create a password" })
             </div>
-        </div>
-        <div class="row">
-            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-10">
-                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.ConfirmPassword)
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", placeholder = "Confirm your password" })
             </div>
-        </div>
-        <!-- added new dropdown option -->
-        <div class="row">
-            @Html.LabelFor(m => m.SelectedRole, new { @class = "col-md-2 control-label" })
-            <div class="col-md-10">
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.SelectedRole)
                 @Html.DropDownListFor(m => m.SelectedRole, new List<SelectListItem>
                 {
                     new SelectListItem { Text = "Member", Value = "Member" },
                     new SelectListItem { Text = "Librarian", Value = "Librarian" }
-                },
-                new { @class = "form-control" })
+                }, new { @class = "form-control" })
             </div>
-        </div>
-        <div class="row">
-            <div class="offset-md-2 col-md-10">
-                <input type="submit" value="Register" class="btn btn-outline-dark" />
-            </div>
-        </div>
-    }
-</main>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}
+            <input type="submit" value="Create Account" class="btn auth-btn" />
+        }
+
+    </div>
+</main>
