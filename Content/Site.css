@@ -318,6 +318,40 @@ p {
         font-weight: bold;
         color: #2f6b2f;
     }
+/* ===== TEAM TABLE ===== */
+
+.team-table-section {
+    margin-top: 40px;
+}
+
+    .team-table-section h3 {
+        color: #1e3c72;
+        margin-bottom: 15px;
+    }
+
+.team-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+
+    .team-table th {
+        background-color: #eef7ea;
+        color: black;
+        text-align: left;
+        padding: 14px;
+        border: 1px solid #d6e7d1;
+    }
+
+    .team-table td {
+        padding: 14px;
+        border: 1px solid #dcdcdc;
+        color: black;
+    }
+
+    .team-table tr:hover {
+        background-color: #f8fff5;
+    }
 /* ===== INPUT FIELDS ===== */
 
 input,
