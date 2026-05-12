@@ -5,7 +5,10 @@
     ViewBag.Title = "Books";
 }
 
-<h2>Books</h2>
+<div class="page-header-box">
+    <h2>Books</h2>
+    <p>Manage library book records, copies, availability, and actions.</p>
+</div>
 
 <p>
     @if (User.IsInRole("Librarian"))
@@ -15,7 +18,7 @@
     }
 </p>
 
-<table class="table table-bordered">
+<table class="table table-bordered books-table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.Title)

@@ -1,58 +1,39 @@
-﻿@model IEnumerable<LibrarySystem99.Models.BorrowingTransaction>
+﻿@{
+    ViewBag.Title = "Librarian Dashboard";
+}
 
-<h2>Librarian Dashboard</h2>
+<main class="dashboard-page">
 
-<div style="display:flex; gap:30px;">
-    <div>
-        <h4>Total Books</h4>
-        <h2>@ViewBag.TotalBooks</h2>
+    <div class="dashboard-header">
+        <h1>Librarian Dashboard</h1>
+        <p>Welcome, @User.Identity.Name. You have full access to manage library operations.</p>
     </div>
 
-    <div>
-        <h4>Active Borrows</h4>
-        <h2>@ViewBag.ActiveBorrows</h2>
+    <div class="dashboard-grid">
+
+        <div class="dashboard-card">
+            <h3>Books Management</h3>
+            <p>Add new books, update existing records, and manage book availability.</p>
+            <a href="/Books" class="btn auth-btn">Manage Books</a>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>Member Management</h3>
+            <p>View registered members, manage accounts, and monitor borrowing activity.</p>
+            <a href="/Member" class="btn auth-btn">View Members</a>
+        </div>
+
+        <div class="dashboard-card">
+            <h3>Reports</h3>
+            <p>Check borrowing reports, overdue books, and library usage information.</p>
+            <a href="#" class="btn auth-btn">View Reports</a>
+        </div>
+
     </div>
 
-    <div>
-        <h4>Overdue Books</h4>
-        <h2 style="color:red">@ViewBag.OverdueBooks</h2>
+    <div class="dashboard-note">
+        <strong>Security note:</strong>
+        This page is protected and only accessible to users with the Librarian role.
     </div>
-</div>
 
-<hr />
-
-<h3>Recent Borrow Activity</h3>
-
-<table class="table">
-    <tr>
-        <th>Book</th>
-        <th>User</th>
-        <th>Borrow Date</th>
-        <th>Due Date</th>
-        <th>Status</th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>@item.Book.Title</td>
-            <td>@item.User.Email</td>
-            <td>@item.BorrowDate</td>
-            <td>@item.DueDate</td>
-            <td>
-                @if (item.IsReturned)
-                {
-                    <span style="color:green">Returned</span>
-                }
-                else if (item.DueDate < DateTime.Now)
-                {
-                    <span style="color:red">Overdue</span>
-                }
-                else
-                {
-                    <span style="color:orange">Active</span>
-                }
-            </td>
-        </tr>
-    }
-</table>
+</main>
