@@ -163,6 +163,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BooksController.cs" />
+    <Compile Include="Controllers\BookReviewsController.cs" />
     <Compile Include="Controllers\BorrowingPoliciesController.cs" />
     <Compile Include="Controllers\BorrowingTransactionsController.cs" />
     <Compile Include="Controllers\FeedbackController.cs" />
@@ -200,9 +201,14 @@
     <Compile Include="Migrations\202605171445372_AddFeedbackReply.Designer.cs">
       <DependentUpon>202605171445372_AddFeedbackReply.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202605171456095_AddBookReviews.cs" />
+    <Compile Include="Migrations\202605171456095_AddBookReviews.Designer.cs">
+      <DependentUpon>202605171456095_AddBookReviews.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Book.cs" />
+    <Compile Include="Models\BookReview.cs" />
     <Compile Include="Models\BorrowingTransaction.cs" />
     <Compile Include="Models\BorrowingPolicy.cs" />
     <Compile Include="Models\Fine.cs" />
@@ -318,6 +324,11 @@
     <Content Include="Views\Reports.cshtml" />
     <Content Include="Views\Reports\Index.cshtml" />
     <Content Include="Views\Feedback\Index.cshtml" />
+    <Content Include="Views\BookReviews.cshtml" />
+    <Content Include="Views\BookReviews\Create.cshtml" />
+    <Content Include="Views\BookReviews\Edit.cshtml" />
+    <Content Include="Views\BookReviews\Index.cshtml" />
+    <Content Include="Views\Shared\_BookReviews.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -367,6 +378,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202605171445372_AddFeedbackReply.resx">
       <DependentUpon>202605171445372_AddFeedbackReply.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202605171456095_AddBookReviews.resx">
+      <DependentUpon>202605171456095_AddBookReviews.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
