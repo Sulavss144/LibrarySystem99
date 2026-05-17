@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "About";
+    var feedback = ViewBag.RecentFeedback as System.Collections.Generic.List<LibrarySystem99.Models.WebsiteFeedback>;
 }
 
 <main class="about-page">
@@ -43,24 +44,94 @@
 
     </section>
 
-    <section class="recommendation-section">
+    @* ===== FEEDBACK SECTION ===== *@
+    <hr style="margin: 40px 0;" />
 
-        <h2>Member Recommendations</h2>
+    <section class="feedback-section">
+        <h2>What people are saying</h2>
 
-        <div class="recommendation-card">
-            <p>
-                "LibraryKOI made managing books and borrowing records much easier and faster."
-            </p>
-            <span>- Student Member</span>
-        </div>
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">@TempData["Success"]</div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">@TempData["Error"]</div>
+        }
 
-        <div class="recommendation-card">
-            <p>
-                "The system interface is clean, simple, and easy to use for library staff."
-            </p>
-            <span>- Librarian</span>
-        </div>
+        @* ===== Feedback list ===== *@
+        @if (feedback != null && feedback.Any())
+        {
+            <div class="row">
+                @foreach (var f in feedback)
+                {
+                    <div class="col-md-6" style="margin-bottom: 20px;">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <p style="font-style: italic;">"@f.Message"</p>
+                                <p class="text-muted" style="margin-bottom:0;">
+                                    <strong>— @f.Name</strong><br />
+                                    <small>@f.CreatedDate.ToString("dd MMM yyyy")</small>
+                                </p>
 
+                                @if (!string.IsNullOrEmpty(f.LibrarianReply))
+                                {
+                                    <div style="margin-top: 15px; padding: 10px; background: #e8f4f8; border-left: 4px solid #5bc0de; border-radius: 4px;">
+                                        <strong style="color: #31708f;">📖 LibraryKOI Team:</strong>
+                                        <p style="margin: 5px 0 0 0;">@f.LibrarianReply</p>
+                                        @if (f.RepliedDate.HasValue)
+                                        {
+                                            <small class="text-muted">@f.RepliedDate.Value.ToString("dd MMM yyyy")</small>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p class="text-muted">No feedback yet. Be the first to share your thoughts!</p>
+        }
+
+        @* ===== Submission form ===== *@
+        <hr />
+        <h3>Leave Your Feedback</h3>
+        <p class="text-muted">We'd love to hear what you think of LibraryKOI.</p>
+
+        @using (Html.BeginForm("Create", "Feedback", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Your Name</label>
+                <div class="col-md-8">
+                    <input type="text" name="Name" class="form-control" required maxlength="100" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Email</label>
+                <div class="col-md-8">
+                    <input type="email" name="Email" class="form-control" required maxlength="200" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Message</label>
+                <div class="col-md-8">
+                    <textarea name="Message" class="form-control" rows="4" required maxlength="1000"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-8">
+                    <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                </div>
+            </div>
+        }
     </section>
 
 </main>

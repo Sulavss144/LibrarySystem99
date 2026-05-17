@@ -50,6 +50,8 @@ namespace LibrarySystem99.Models
         public DbSet<Fine> Fines { get; set; }
         public DbSet<BorrowingPolicy> BorrowingPolicies { get; set; }
 
+        public DbSet<WebsiteFeedback> WebsiteFeedbacks { get; set; }
+
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {

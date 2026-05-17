@@ -1,0 +1,123 @@
+﻿@model IEnumerable<LibrarySystem99.Models.WebsiteFeedback>
+
+@{
+    ViewBag.Title = "Manage Website Feedback";
+}
+
+<div class="container">
+    <h2>Manage Website Feedback</h2>
+    <p class="text-muted">Review, reply to, and moderate feedback submitted on the About page.</p>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    @* KPI row *@
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading"><h4>Total Submissions</h4></div>
+                <div class="panel-body text-center">
+                    <h1 style="margin:0;">@ViewBag.Total</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-success">
+                <div class="panel-heading"><h4>Visible (Approved)</h4></div>
+                <div class="panel-body text-center">
+                    <h1 style="margin:0;">@ViewBag.Approved</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-warning">
+                <div class="panel-heading"><h4>Hidden</h4></div>
+                <div class="panel-body text-center">
+                    <h1 style="margin:0;">@ViewBag.Hidden</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        foreach (var f in Model)
+        {
+            <div class="panel @(f.IsApproved ? "panel-default" : "panel-warning")" style="margin-bottom: 20px;">
+                <div class="panel-heading">
+                    <strong>@f.Name</strong> &lt;@f.Email&gt;
+                    <span class="text-muted">— @f.CreatedDate.ToString("dd MMM yyyy HH:mm")</span>
+                    <span class="pull-right">
+                        @if (f.IsApproved)
+                        {
+                            <span class="label label-success">Visible</span>
+                        }
+                        else
+                        {
+                            <span class="label label-default">Hidden</span>
+                        }
+                        @if (!string.IsNullOrEmpty(f.LibrarianReply))
+                        {
+                            <span class="label label-info">Replied</span>
+                        }
+                    </span>
+                </div>
+                <div class="panel-body">
+                    <p>@f.Message</p>
+
+                    @if (!string.IsNullOrEmpty(f.LibrarianReply))
+                    {
+                        <div class="well well-sm" style="background:#e8f4f8; border-left: 4px solid #5bc0de;">
+                            <strong>Librarian Reply</strong>
+                            <small class="text-muted"> — @(f.RepliedDate.HasValue ? f.RepliedDate.Value.ToString("dd MMM yyyy HH:mm") : "")</small>
+                            <p style="margin:5px 0 0 0;">@f.LibrarianReply</p>
+                        </div>
+                    }
+
+                    @* Reply form (collapsible) *@
+                    <a data-toggle="collapse" href="#reply-@f.Id" class="btn btn-sm btn-info">
+                        @(string.IsNullOrEmpty(f.LibrarianReply) ? "Reply" : "Edit reply")
+                    </a>
+
+                    @using (Html.BeginForm("ToggleApproval", "Feedback", new { id = f.Id }, FormMethod.Post, new { style = "display:inline;" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm @(f.IsApproved ? "btn-warning" : "btn-success")">
+                            @(f.IsApproved ? "Hide" : "Show")
+                        </button>
+                    }
+
+                    @using (Html.BeginForm("Delete", "Feedback", new { id = f.Id }, FormMethod.Post, new { style = "display:inline;", onsubmit = "return confirm('Permanently delete this feedback?');" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    }
+
+                    <div id="reply-@f.Id" class="collapse" style="margin-top: 15px;">
+                        @using (Html.BeginForm("Reply", "Feedback", new { id = f.Id }, FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="form-group">
+                                <label>Your reply:</label>
+                                <textarea name="replyText" class="form-control" rows="3" maxlength="1000" placeholder="Write your response here...">@f.LibrarianReply</textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-sm">Post Reply</button>
+                            <small class="text-muted">Leave empty and submit to clear an existing reply.</small>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p class="text-muted">No feedback submitted yet.</p>
+    }
+
+    <hr />
+    <p>
+        @Html.ActionLink("« Back to Dashboard", "Index", "Librarian", null, new { @class = "btn btn-default" })
+    </p>
+</div>

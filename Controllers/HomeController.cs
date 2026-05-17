@@ -48,6 +48,18 @@ namespace LibrarySystem99.Controllers
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
+
+            using (var db = new ApplicationDbContext())
+            {
+                var recentFeedback = db.WebsiteFeedbacks
+                    .Where(f => f.IsApproved)
+                    .OrderByDescending(f => f.CreatedDate)
+                    .Take(10)
+                    .ToList();
+
+                ViewBag.RecentFeedback = recentFeedback;
+            }
+
             return View();
         }
 
