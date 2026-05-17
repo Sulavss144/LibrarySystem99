@@ -1,0 +1,406 @@
+﻿@model LibrarySystem99.Models.ReportsViewModel
+
+@{
+    ViewBag.Title = "Reports";
+}
+
+<div class="container">
+
+    <h2>Library Reports</h2>
+    <p class="text-muted">Overview of library activity and statistics.</p>
+
+    @* ===== TOP-LEVEL KPIs ===== *@
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading"><h4>Total Books</h4></div>
+                <div class="panel-body text-center">
+                    <h1 style="margin:0;">@Model.TotalBooks</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-info">
+                <div class="panel-heading"><h4>Total Members</h4></div>
+                <div class="panel-body text-center">
+                    <h1 style="margin:0;">@Model.TotalMembers</h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-success">
+                <div class="panel-heading"><h4>Total Borrows</h4></div>
+                <div class="panel-body text-center">
+                    <h1 style="margin:0;">@Model.TotalBorrows</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* ===== QUICK NAV ===== *@
+    <div class="well">
+        <strong>Jump to:</strong>
+        <a href="#overdue">Overdue Books</a> ·
+        <a href="#popular">Popular Books</a> ·
+        <a href="#members">Member Activity</a> ·
+        <a href="#fines">Fines Summary</a> ·
+        <a href="#trends">Borrowing Trends</a> ·
+        <a href="#inventory">Inventory Status</a>
+    </div>
+
+    @* ===== 1. OVERDUE BOOKS ===== *@
+    <h3 id="overdue">Overdue Books</h3>
+    @if (Model.OverdueBooks.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Book</th>
+                    <th>Member</th>
+                    <th>Borrow Date</th>
+                    <th>Due Date</th>
+                    <th>Days Overdue</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.OverdueBooks)
+                {
+                    <tr>
+                        <td>@(item.Book != null ? item.Book.Title : "—")</td>
+                        <td>@(item.User != null ? item.User.Email : "—")</td>
+                        <td>@item.BorrowDate.ToShortDateString()</td>
+                        <td>@item.DueDate.ToShortDateString()</td>
+                        <td><span class="label label-danger">@item.OverdueDays days</span></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-success">No overdue books. </p>
+    }
+
+    <hr />
+
+    @* ===== 2. POPULAR BOOKS ===== *@
+    <h3 id="popular">Most Popular Books</h3>
+    <div class="row">
+        <div class="col-md-7">
+            @if (Model.PopularBooks.Any())
+            {
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Borrows</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ var rank = 1; }
+                        @foreach (var b in Model.PopularBooks)
+                        {
+                            <tr>
+                                <td>@rank</td>
+                                <td>@b.Title</td>
+                                <td>@b.Author</td>
+                                <td><strong>@b.BorrowCount</strong></td>
+                            </tr>
+                            rank++;
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="text-muted">No borrowing data yet.</p>
+            }
+        </div>
+        <div class="col-md-5">
+            <canvas id="popularBooksChart" height="250"></canvas>
+        </div>
+    </div>
+
+    <hr />
+
+    @* ===== 3. MEMBER ACTIVITY ===== *@
+    <h3 id="members">Member Activity</h3>
+
+    <h4>Top Borrowers</h4>
+    @if (Model.TopBorrowers.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Email</th>
+                    <th>Full Name</th>
+                    <th>Borrows</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ var rank = 1; }
+                @foreach (var m in Model.TopBorrowers)
+                {
+                    <tr>
+                        <td>@rank</td>
+                        <td>@m.Email</td>
+                        <td>@(string.IsNullOrEmpty(m.FullName) ? "—" : m.FullName)</td>
+                        <td><strong>@m.BorrowCount</strong></td>
+                    </tr>
+                    rank++;
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-muted">No borrowing data yet.</p>
+    }
+
+    <h4>Inactive Members <small class="text-muted">(no borrows in last 30 days)</small></h4>
+    @if (Model.InactiveMembers.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Full Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var m in Model.InactiveMembers)
+                {
+                    <tr>
+                        <td>@m.Email</td>
+                        <td>@(string.IsNullOrEmpty(m.FullName) ? "—" : m.FullName)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-success">All members are active.</p>
+    }
+
+    <hr />
+
+    @* ===== 4. FINES SUMMARY ===== *@
+    <h3 id="fines">Fines Summary</h3>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-success">
+                <div class="panel-heading"><h4>Total Collected</h4></div>
+                <div class="panel-body text-center">
+                    <h2 style="margin:0;">$@Model.TotalCollected</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-danger">
+                <div class="panel-heading"><h4>Total Unpaid</h4></div>
+                <div class="panel-body text-center">
+                    <h2 style="margin:0; color:red;">$@Model.TotalUnpaid</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4>Fines by Member</h4>
+    @if (Model.FinesByMember.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Member</th>
+                    <th>Total Fines</th>
+                    <th>Unpaid</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var f in Model.FinesByMember)
+                {
+                    <tr>
+                        <td>@f.Email</td>
+                        <td>$@f.TotalFines</td>
+                        <td>
+                            @if (f.UnpaidFines > 0)
+                            {
+                                <span class="text-danger"><strong>$@f.UnpaidFines</strong></span>
+                            }
+                            else
+                            {
+                                <span class="text-success">$0</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-muted">No fines recorded.</p>
+    }
+
+    <hr />
+
+    @* ===== 5. BORROWING TRENDS ===== *@
+    <h3 id="trends">Borrowing Trends</h3>
+
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Last 14 Days</h4>
+            <canvas id="dailyTrendChart" height="200"></canvas>
+        </div>
+        <div class="col-md-6">
+            <h4>Last 6 Months</h4>
+            <canvas id="monthlyTrendChart" height="200"></canvas>
+        </div>
+    </div>
+
+    <hr />
+
+    @* ===== 6. INVENTORY STATUS ===== *@
+    <h3 id="inventory">Inventory Status</h3>
+
+    <h4>Low Stock <small class="text-muted">(1–2 copies available)</small></h4>
+    @if (Model.LowStockBooks.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Available / Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var b in Model.LowStockBooks)
+                {
+                    <tr>
+                        <td>@b.Title</td>
+                        <td>@b.Author</td>
+                        <td><span class="label label-warning">@b.AvailableCopies / @b.TotalCopies</span></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-success">No low-stock books.</p>
+    }
+
+    <h4>Fully Borrowed <small class="text-muted">(0 copies available)</small></h4>
+    @if (Model.FullyBorrowedBooks.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Total Copies</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var b in Model.FullyBorrowedBooks)
+                {
+                    <tr>
+                        <td>@b.Title</td>
+                        <td>@b.Author</td>
+                        <td><span class="label label-danger">All @b.TotalCopies borrowed</span></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-success">All books have available copies.</p>
+    }
+
+    <hr />
+    <p>
+        @Html.ActionLink("« Back to Dashboard", "Index", "Librarian", null, new { @class = "btn btn-default" })
+    </p>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script>
+        // ===== Popular Books Chart =====
+        @if (Model.PopularBooks.Any())
+        {
+            <text>
+        const popularBooksCtx = document.getElementById('popularBooksChart').getContext('2d');
+        new Chart(popularBooksCtx, {
+            type: 'bar',
+            data: {
+                labels: [@Html.Raw(string.Join(",", Model.PopularBooks.Select(b => "\"" + b.Title.Replace("\"", "") + "\"")))],
+                datasets: [{
+                    label: 'Borrows',
+                    data: [@string.Join(",", Model.PopularBooks.Select(b => b.BorrowCount))],
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } } }
+            }
+        });
+            </text>
+        }
+
+        // ===== Daily Trend Chart =====
+        const dailyCtx = document.getElementById('dailyTrendChart').getContext('2d');
+        new Chart(dailyCtx, {
+            type: 'line',
+            data: {
+                labels: [@Html.Raw(string.Join(",", Model.BorrowsPerDay.Select(d => "\"" + d.Period + "\"")))],
+                datasets: [{
+                    label: 'Borrows',
+                    data: [@string.Join(",", Model.BorrowsPerDay.Select(d => d.Count))],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+            }
+        });
+
+        // ===== Monthly Trend Chart =====
+        const monthlyCtx = document.getElementById('monthlyTrendChart').getContext('2d');
+        new Chart(monthlyCtx, {
+            type: 'bar',
+            data: {
+                labels: [@Html.Raw(string.Join(",", Model.BorrowsPerMonth.Select(d => "\"" + d.Period + "\"")))],
+                datasets: [{
+                    label: 'Borrows',
+                    data: [@string.Join(",", Model.BorrowsPerMonth.Select(d => d.Count))],
+                    backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+            }
+        });
+    </script>
+}
