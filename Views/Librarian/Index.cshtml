@@ -1,58 +1,120 @@
 ﻿@model IEnumerable<LibrarySystem99.Models.BorrowingTransaction>
 
-<h2>Librarian Dashboard</h2>
+@{
+    ViewBag.Title = "Librarian Dashboard";
+}
 
-<div style="display:flex; gap:30px;">
-    <div>
-        <h4>Total Books</h4>
-        <h2>@ViewBag.TotalBooks</h2>
+<div class="container">
+
+    @* Welcome header *@
+    <div class="jumbotron" style="padding: 30px;">
+        <h1>Librarian Dashboard</h1>
+        <p class="lead">Welcome, @User.Identity.Name. You have full library management access.</p>
     </div>
 
-    <div>
-        <h4>Active Borrows</h4>
-        <h2>@ViewBag.ActiveBorrows</h2>
+    @* KPI row *@
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-primary">
+                <div class="panel-heading"><h4>Total Books</h4></div>
+                <div class="panel-body text-center">
+                    <h1 style="margin:0;">@ViewBag.TotalBooks</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="panel panel-info">
+                <div class="panel-heading"><h4>Active Borrows</h4></div>
+                <div class="panel-body text-center">
+                    <h1 style="margin:0;">@ViewBag.ActiveBorrows</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="panel panel-danger">
+                <div class="panel-heading"><h4>Overdue Books</h4></div>
+                <div class="panel-body text-center">
+                    <h1 style="margin:0; color:red;">@ViewBag.OverdueBooks</h1>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div>
-        <h4>Overdue Books</h4>
-        <h2 style="color:red">@ViewBag.OverdueBooks</h2>
+    @* Quick action cards *@
+    <h3>Quick Actions</h3>
+    <div class="row">
+        <div class="col-md-4">
+            <h4>Books Management</h4>
+            <p>Add new books to the catalogue, edit existing entries, and remove outdated titles.</p>
+            <p><a class="btn btn-primary" href="@Url.Action("Index", "Books")">Manage Books &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h4>Member Management</h4>
+            <p>View all registered members, manage accounts, and monitor borrowing activity.</p>
+            <p><a class="btn btn-primary" href="#">View Members &raquo;</a></p>
+        </div>
+        <div class="col-md-4">
+            <h4>Reports</h4>
+            <p>View borrowing statistics, overdue books, and library usage reports.</p>
+            <p><a class="btn btn-primary" href="#">View Reports &raquo;</a></p>
+        </div>
     </div>
-</div>
 
-<hr />
+    <hr />
 
-<h3>Recent Borrow Activity</h3>
+    @* Recent activity *@
+    <h3>Recent Borrow Activity</h3>
 
-<table class="table">
-    <tr>
-        <th>Book</th>
-        <th>User</th>
-        <th>Borrow Date</th>
-        <th>Due Date</th>
-        <th>Status</th>
-    </tr>
-
-    @foreach (var item in Model)
+    @if (Model != null && Model.Any())
     {
-        <tr>
-            <td>@item.Book.Title</td>
-            <td>@item.User.Email</td>
-            <td>@item.BorrowDate</td>
-            <td>@item.DueDate</td>
-            <td>
-                @if (item.IsReturned)
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Book</th>
+                    <th>User</th>
+                    <th>Borrow Date</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
                 {
-                    <span style="color:green">Returned</span>
+                    <tr>
+                        <td>@(item.Book != null ? item.Book.Title : "—")</td>
+                        <td>@(item.User != null ? item.User.Email : "—")</td>
+                        <td>@item.BorrowDate</td>
+                        <td>@item.DueDate</td>
+                        <td>
+                            @if (item.IsReturned)
+                            {
+                                <span style="color:green">Returned</span>
+                            }
+                            else if (item.DueDate < DateTime.Now)
+                            {
+                                <span style="color:red">Overdue</span>
+                            }
+                            else
+                            {
+                                <span style="color:orange">Active</span>
+                            }
+                        </td>
+                    </tr>
                 }
-                else if (item.DueDate < DateTime.Now)
-                {
-                    <span style="color:red">Overdue</span>
-                }
-                else
-                {
-                    <span style="color:orange">Active</span>
-                }
-            </td>
-        </tr>
+            </tbody>
+        </table>
     }
-</table>
+    else
+    {
+        <p class="text-muted">No borrow activity yet.</p>
+    }
+
+    <hr />
+    <p class="text-muted small">
+        <strong>Security note:</strong> This page is protected by <code>[Authorize(Roles = "Librarian,Admin")]</code>.
+        Only users with the Librarian role can access it.
+    </p>
+
+</div>
