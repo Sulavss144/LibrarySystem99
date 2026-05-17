@@ -1,74 +1,78 @@
 ﻿@model LibrarySystem99.Models.Book
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Book Details";
+    var reviews = ViewBag.Reviews as System.Collections.Generic.List<LibrarySystem99.Models.BookReview>;
+    bool userHasReviewed = ViewBag.UserHasReviewed ?? false;
 }
 
-<h2>Details</h2>
+<div class="container">
+    <h2>@Model.Title</h2>
+    <p class="lead">by @Model.Author</p>
 
-<div>
-    <h4>Book</h4>
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Info"] != null)
+    {
+        <div class="alert alert-info">@TempData["Info"]</div>
+    }
+
+    <div class="panel panel-default">
+        <div class="panel-heading"><h4>Book Information</h4></div>
+        <div class="panel-body">
+            <dl class="dl-horizontal">
+                <dt>ISBN:</dt>
+                <dd>@(string.IsNullOrEmpty(Model.ISBN) ? "—" : Model.ISBN)</dd>
+
+                <dt>Category:</dt>
+                <dd>@(string.IsNullOrEmpty(Model.Category) ? "—" : Model.Category)</dd>
+
+                <dt>Total Copies:</dt>
+                <dd>@Model.TotalCopies</dd>
+
+                <dt>Available:</dt>
+                <dd>
+                    @if (Model.AvailableCopies > 0)
+                    {
+                        <span class="label label-success">@Model.AvailableCopies available</span>
+                    }
+                    else
+                    {
+                        <span class="label label-danger">Not available</span>
+                    }
+                </dd>
+
+                <dt>Description:</dt>
+                <dd>@(string.IsNullOrEmpty(Model.Description) ? "—" : Model.Description)</dd>
+            </dl>
+        </div>
+    </div>
+
+    @* Action buttons *@
+    <p>
+        @if (User.IsInRole("Member") && Model.AvailableCopies > 0)
+        {
+            @Html.ActionLink("Borrow This Book", "Borrow", "Books", new { id = Model.Id }, new { @class = "btn btn-success" })
+        }
+        @if (User.IsInRole("Librarian"))
+        {
+            @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-warning" })
+            @Html.ActionLink("Delete", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
+        }
+        @Html.ActionLink("« Back to List", "Index", null, new { @class = "btn btn-default" })
+    </p>
+
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
+    @* ===== REVIEWS SECTION ===== *@
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Member") && !userHasReviewed)
+    {
+        <p>
+            @Html.ActionLink("Write a Review", "Create", "BookReviews", new { bookId = Model.Id }, new { @class = "btn btn-primary" })
+        </p>
+    }
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Author)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Author)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ISBN)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ISBN)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Category)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.TotalCopies)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TotalCopies)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.AvailableCopies)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.AvailableCopies)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-
-    </dl>
+    @Html.Partial("_BookReviews", reviews ?? new System.Collections.Generic.List<LibrarySystem99.Models.BookReview>())
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>

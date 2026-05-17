@@ -1,0 +1,85 @@
+﻿@model LibrarySystem99.Models.BookReview
+
+@{
+    ViewBag.Title = "Edit Review";
+    var book = ViewBag.Book as LibrarySystem99.Models.Book;
+}
+
+<div class="container">
+    <h2>Edit Your Review</h2>
+
+    @if (book != null)
+    {
+        <p class="lead">
+            For <strong>@book.Title</strong> by @book.Author
+        </p>
+    }
+
+    @using (Html.BeginForm("Edit", "BookReviews", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" name="Id" value="@Model.Id" />
+        <input type="hidden" name="BookId" value="@Model.BookId" />
+
+        @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Rating</label>
+            <div class="col-md-10">
+                <div class="star-rating-input" style="font-size: 32px;" data-current="@Model.Rating">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        <span class="star-label" data-value="@i" style="cursor:pointer; padding: 0 5px;">&#9733;</span>
+                    }
+                    <input type="hidden" name="Rating" id="ratingValue" value="@Model.Rating" />
+                </div>
+                @Html.ValidationMessage("Rating", "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="ReviewText">Your Review</label>
+            <div class="col-md-10">
+                <textarea name="ReviewText" id="ReviewText" class="form-control" rows="5" maxlength="1000">@Model.ReviewText</textarea>
+                @Html.ValidationMessage("ReviewText", "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                @Html.ActionLink("Cancel", "Details", "Books", new { id = Model.BookId }, new { @class = "btn btn-default" })
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const container = document.querySelector('.star-rating-input');
+            const stars = container.querySelectorAll('.star-label');
+            const hiddenInput = document.getElementById('ratingValue');
+            let selected = parseInt(container.getAttribute('data-current')) || 0;
+
+            function paint(upTo) {
+                stars.forEach((star, i) => {
+                    star.style.color = i < upTo ? '#f5a623' : '#ccc';
+                });
+            }
+
+            stars.forEach((star, i) => {
+                star.addEventListener('mouseenter', () => paint(i + 1));
+                star.addEventListener('mouseleave', () => paint(selected));
+                star.addEventListener('click', () => {
+                    selected = i + 1;
+                    hiddenInput.value = selected;
+                    paint(selected);
+                });
+            });
+
+            paint(selected); // initial paint - show existing rating
+        })();
+    </script>
+}

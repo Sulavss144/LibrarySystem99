@@ -1,0 +1,85 @@
+﻿@model System.Collections.Generic.List<LibrarySystem99.Models.BookReview>
+@using Microsoft.AspNet.Identity
+
+@{
+    var currentUserId = User.Identity.IsAuthenticated ? User.Identity.GetUserId() : null;
+    var isLibrarian = User.IsInRole("Librarian") || User.IsInRole("Admin");
+    var avg = (Model != null && Model.Any()) ? Model.Average(r => r.Rating) : 0;
+    var count = Model != null ? Model.Count : 0;
+}
+
+<div class="book-reviews-section">
+    <h3>Reviews</h3>
+
+    @if (count > 0)
+    {
+        int filled = (int)Math.Round(avg);
+        <div class="well well-sm" style="display: inline-block; padding: 10px 20px;">
+            <span style="font-size: 24px; color: #f5a623;">
+                @for (int i = 0; i < filled; i++)
+                {
+                    <span>&#9733;</span>
+                }
+                @for (int i = filled; i < 5; i++)
+                {
+                    <span style="color:#ccc;">&#9733;</span>
+                }
+            </span>
+            <strong style="margin-left: 10px;">@avg.ToString("0.0") / 5</strong>
+            <span class="text-muted">(@count review@(count == 1 ? "" : "s"))</span>
+        </div>
+    }
+    else
+    {
+        <p class="text-muted">No reviews yet. Be the first to share your thoughts!</p>
+    }
+
+    @if (Model != null && Model.Any())
+    {
+        foreach (var r in Model.OrderByDescending(x => x.CreatedDate))
+        {
+            <div class="panel panel-default" style="margin-top: 15px;">
+                <div class="panel-body">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong>@(r.User != null ? r.User.Email : "Anonymous")</strong>
+                            <span style="color: #f5a623; margin-left: 10px;">
+                                @for (int i = 0; i < r.Rating; i++)
+                                {
+                                    <span>&#9733;</span>
+                                }
+                                @for (int i = r.Rating; i < 5; i++)
+                                {
+                                    <span style="color:#ccc;">&#9733;</span>
+                                }
+                            </span>
+                        </div>
+                        <small class="text-muted">
+                            @r.CreatedDate.ToString("dd MMM yyyy")
+                            @if (r.UpdatedDate.HasValue)
+                            {
+                                <span>(edited)</span>
+                            }
+                        </small>
+                    </div>
+                    <p style="margin-top: 10px;">@r.ReviewText</p>
+
+                    @if (r.UserId == currentUserId || isLibrarian)
+                    {
+                        <div style="margin-top: 10px;">
+                            @if (r.UserId == currentUserId)
+                            {
+                                @Html.ActionLink("Edit", "Edit", "BookReviews", new { id = r.Id }, new { @class = "btn btn-xs btn-default" })
+                            }
+                            @using (Html.BeginForm("Delete", "BookReviews", new { id = r.Id }, FormMethod.Post, new { style = "display:inline;", onsubmit = "return confirm('Delete this review?');" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-xs btn-danger">Delete</button>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    }
+</div>

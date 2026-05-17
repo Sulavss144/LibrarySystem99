@@ -21,6 +21,7 @@ namespace LibrarySystem99.Controllers
         }
 
         // GET: Details
+       
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -29,6 +30,25 @@ namespace LibrarySystem99.Controllers
             var book = db.Books.Find(id);
             if (book == null)
                 return HttpNotFound();
+
+            // Load reviews for this book
+            var reviews = db.BookReviews
+                .Include(r => r.User)
+                .Where(r => r.BookId == id)
+                .ToList();
+
+            ViewBag.Reviews = reviews;
+
+            // Check if current user has already reviewed
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = User.Identity.GetUserId();
+                ViewBag.UserHasReviewed = reviews.Any(r => r.UserId == userId);
+            }
+            else
+            {
+                ViewBag.UserHasReviewed = false;
+            }
 
             return View(book);
         }

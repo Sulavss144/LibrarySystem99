@@ -52,6 +52,8 @@ namespace LibrarySystem99.Models
 
         public DbSet<WebsiteFeedback> WebsiteFeedbacks { get; set; }
 
+        public DbSet<BookReview> BookReviews { get; set; }
+
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
