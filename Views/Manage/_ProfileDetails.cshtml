@@ -1,0 +1,21 @@
+﻿@model LibrarySystem99.Models.ApplicationUser
+
+<dl class="dl-horizontal">
+    <dt>Full Name:</dt>
+    <dd>@(string.IsNullOrEmpty(Model.FullName) ? "—" : Model.FullName)</dd>
+
+    <dt>Email:</dt>
+    <dd>@Model.Email</dd>
+
+    <dt>Phone:</dt>
+    <dd>@(string.IsNullOrEmpty(Model.PhoneNumber) ? "—" : Model.PhoneNumber)</dd>
+
+    <dt>Date of Birth:</dt>
+    <dd>@(Model.DateOfBirth.HasValue ? Model.DateOfBirth.Value.ToShortDateString() : "—")</dd>
+
+    <dt>Address:</dt>
+    <dd>@(string.IsNullOrEmpty(Model.Address) ? "—" : Model.Address)</dd>
+
+    <dt>Bio:</dt>
+    <dd>@(string.IsNullOrEmpty(Model.Bio) ? "—" : Model.Bio)</dd>
+</dl>

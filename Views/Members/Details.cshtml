@@ -1,0 +1,161 @@
+﻿@model LibrarySystem99.Models.ApplicationUser
+
+@{
+    ViewBag.Title = "Member Details";
+    var borrowings = ViewBag.Borrowings as System.Collections.Generic.List<LibrarySystem99.Models.BorrowingTransaction>;
+    var fines = ViewBag.Fines as System.Collections.Generic.List<LibrarySystem99.Models.Fine>;
+}
+
+<div class="container">
+    <h2>Member Details</h2>
+
+    @* Profile section *@
+    <div class="panel panel-default">
+        <div class="panel-heading"><h4>Profile</h4></div>
+        <div class="panel-body">
+            <dl class="dl-horizontal">
+                <dt>Email:</dt>
+                <dd>@Model.Email</dd>
+
+                <dt>Username:</dt>
+                <dd>@Model.UserName</dd>
+
+                <dt>Phone:</dt>
+                <dd>@(string.IsNullOrEmpty(Model.PhoneNumber) ? "—" : Model.PhoneNumber)</dd>
+
+                <dt>Email Confirmed:</dt>
+                <dd>@(Model.EmailConfirmed ? "Yes" : "No")</dd>
+
+                <dt>Two-Factor Auth:</dt>
+                <dd>@(Model.TwoFactorEnabled ? "Enabled" : "Disabled")</dd>
+            </dl>
+        </div>
+    </div>
+
+    @* KPI cards *@
+    <div class="row">
+        <div class="col-md-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading"><h5>Total Borrowed</h5></div>
+                <div class="panel-body text-center">
+                    <h2 style="margin:0;">@ViewBag.TotalBorrowed</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-info">
+                <div class="panel-heading"><h5>Currently Borrowed</h5></div>
+                <div class="panel-body text-center">
+                    <h2 style="margin:0;">@ViewBag.CurrentlyBorrowed</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-danger">
+                <div class="panel-heading"><h5>Overdue</h5></div>
+                <div class="panel-body text-center">
+                    <h2 style="margin:0; color:red;">@ViewBag.OverdueCount</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="panel panel-warning">
+                <div class="panel-heading"><h5>Unpaid Fines</h5></div>
+                <div class="panel-body text-center">
+                    <h2 style="margin:0;">$@ViewBag.UnpaidFines</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* Borrowing history *@
+    <h3>Borrowing History</h3>
+    @if (borrowings != null && borrowings.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Book</th>
+                    <th>Borrow Date</th>
+                    <th>Due Date</th>
+                    <th>Return Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var b in borrowings)
+                {
+                    <tr>
+                        <td>@(b.Book != null ? b.Book.Title : "—")</td>
+                        <td>@b.BorrowDate.ToShortDateString()</td>
+                        <td>@b.DueDate.ToShortDateString()</td>
+                        <td>@(b.ReturnDate.HasValue ? b.ReturnDate.Value.ToShortDateString() : "—")</td>
+                        <td>
+                            @if (b.IsReturned)
+                            {
+                                <span style="color:green">Returned</span>
+                            }
+                            else if (b.DueDate < DateTime.Now)
+                            {
+                                <span style="color:red">Overdue</span>
+                            }
+                            else
+                            {
+                                <span style="color:blue">Active</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-muted">No borrowing history.</p>
+    }
+
+    @* Fines *@
+    <h3>Fines</h3>
+    @if (fines != null && fines.Any())
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var f in fines)
+                {
+                    <tr>
+                        <td>$@f.Amount</td>
+                        <td>
+                            @if (f.IsPaid)
+                            {
+                                <span style="color:green">Paid</span>
+                            }
+                            else
+                            {
+                                <span style="color:red">Unpaid</span>
+                            }
+                        </td>
+                        <td>@f.CreatedDate.ToShortDateString()</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-muted">No fines on record.</p>
+    }
+
+    <hr />
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-warning" })
+        @Html.ActionLink("Delete", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
+        @Html.ActionLink("« Back to List", "Index", null, new { @class = "btn btn-default" })
+    </p>
+</div>

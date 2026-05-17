@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace LibrarySystem99.Models
 {
@@ -12,6 +13,35 @@ namespace LibrarySystem99.Models
         public string PhoneNumber { get; set; }
         public bool TwoFactor { get; set; }
         public bool BrowserRemembered { get; set; }
+    }
+    public class EditProfileViewModel
+    {
+        [Required]
+        [StringLength(150)]
+        [Display(Name = "Full Name")]
+        public string FullName { get; set; }
+
+        [StringLength(250)]
+        [Display(Name = "Address")]
+        public string Address { get; set; }
+
+        [DataType(DataType.Date)]
+        [Display(Name = "Date of Birth")]
+        public DateTime? DateOfBirth { get; set; }
+
+        [Phone]
+        [Display(Name = "Phone Number")]
+        public string PhoneNumber { get; set; }
+
+        [StringLength(500)]
+        [Url(ErrorMessage = "Please enter a valid URL.")]
+        [Display(Name = "Photo URL")]
+        public string PhotoUrl { get; set; }
+
+        [StringLength(1000)]
+        [DataType(DataType.MultilineText)]
+        [Display(Name = "Bio")]
+        public string Bio { get; set; }
     }
 
     public class ManageLoginsViewModel

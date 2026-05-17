@@ -170,6 +170,7 @@
     <Compile Include="Controllers\LibrarianController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MemberController.cs" />
+    <Compile Include="Controllers\MembersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -184,6 +185,10 @@
     <Compile Include="Migrations\202605121406594_AddFineAndBorrowingPolicy.cs" />
     <Compile Include="Migrations\202605121406594_AddFineAndBorrowingPolicy.Designer.cs">
       <DependentUpon>202605121406594_AddFineAndBorrowingPolicy.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202605171355587_AddUserProfileFields.cs" />
+    <Compile Include="Migrations\202605171355587_AddUserProfileFields.Designer.cs">
+      <DependentUpon>202605171355587_AddUserProfileFields.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -291,6 +296,13 @@
     <Content Include="Views\BorrowingPolicies\Details.cshtml" />
     <Content Include="Views\BorrowingPolicies\Edit.cshtml" />
     <Content Include="Views\BorrowingPolicies\Index.cshtml" />
+    <Content Include="Views\Members.cshtml" />
+    <Content Include="Views\Members\Index.cshtml" />
+    <Content Include="Views\Members\Details.cshtml" />
+    <Content Include="Views\Members\Edit.cshtml" />
+    <Content Include="Views\Members\Delete.cshtml" />
+    <Content Include="Views\Manage\_ProfileDetails.cshtml" />
+    <Content Include="Views\Manage\EditProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -331,6 +343,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202605121406594_AddFineAndBorrowingPolicy.resx">
       <DependentUpon>202605121406594_AddFineAndBorrowingPolicy.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202605171355587_AddUserProfileFields.resx">
+      <DependentUpon>202605171355587_AddUserProfileFields.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

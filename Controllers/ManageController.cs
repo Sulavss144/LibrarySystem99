@@ -64,6 +64,9 @@ namespace LibrarySystem99.Controllers
                 : "";
 
             var userId = User.Identity.GetUserId();
+            var user = await UserManager.FindByIdAsync(userId);
+            ViewBag.User = user;
+
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
@@ -72,6 +75,68 @@ namespace LibrarySystem99.Controllers
                 Logins = await UserManager.GetLoginsAsync(userId),
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
+            return View(model);
+        }
+        //
+        // GET: /Manage/EditProfile
+        public async Task<ActionResult> EditProfile()
+        {
+            var userId = User.Identity.GetUserId();
+            var user = await UserManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return View("Error");
+            }
+
+            var model = new EditProfileViewModel
+            {
+                FullName = user.FullName,
+                Address = user.Address,
+                DateOfBirth = user.DateOfBirth,
+                PhoneNumber = user.PhoneNumber,
+                PhotoUrl = user.PhotoUrl,
+                Bio = user.Bio
+            };
+
+            return View(model);
+        }
+
+        //
+        // POST: /Manage/EditProfile
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditProfile(EditProfileViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var userId = User.Identity.GetUserId();
+            var user = await UserManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                return View("Error");
+            }
+
+            user.FullName = model.FullName;
+            user.Address = model.Address;
+            user.DateOfBirth = model.DateOfBirth;
+            user.PhoneNumber = model.PhoneNumber;
+            user.PhotoUrl = model.PhotoUrl;
+            user.Bio = model.Bio;
+
+            var result = await UserManager.UpdateAsync(user);
+
+            if (result.Succeeded)
+            {
+                TempData["Success"] = "Your profile has been updated.";
+                return RedirectToAction("Index");
+            }
+
+            AddErrors(result);
             return View(model);
         }
 

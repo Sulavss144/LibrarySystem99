@@ -1,0 +1,42 @@
+﻿@model LibrarySystem99.Models.ApplicationUser
+
+@{
+    ViewBag.Title = "Edit Member";
+}
+
+<div class="container">
+    <h2>Edit Member</h2>
+
+    @using (Html.BeginForm("Edit", "Members", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.Hidden("id", Model.Id)
+
+        <div class="form-horizontal">
+            <h4>Member: @Model.UserName</h4>
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Email</label>
+                <div class="col-md-10">
+                    <input type="email" name="Email" value="@Model.Email" class="form-control" required />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Phone Number</label>
+                <div class="col-md-10">
+                    <input type="text" name="PhoneNumber" value="@Model.PhoneNumber" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save Changes" class="btn btn-primary" />
+                    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -1,89 +1,91 @@
 ﻿@model LibrarySystem99.Models.IndexViewModel
 @{
-    ViewBag.Title = "Manage";
+    ViewBag.Title = "My Profile";
+    var user = ViewBag.User as LibrarySystem99.Models.ApplicationUser;
 }
 
 <main aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title.</h2>
+    <div class="container">
+        <h2 id="title">My Profile</h2>
 
-    <p class="text-success">@ViewBag.StatusMessage</p>
-    <div>
-        <h4>Change your account settings</h4>
-        <hr />
-        <dl class="dl-horizontal">
-            <dt>Password:</dt>
-            <dd>
-                [
-                @if (Model.HasPassword)
-                {
-                    @Html.ActionLink("Change your password", "ChangePassword")
-                }
-                else
-                {
-                    @Html.ActionLink("Create", "SetPassword")
-                }
-                ]
-            </dd>
-            <dt>External Logins:</dt>
-            <dd>
-                @Model.Logins.Count [
-                @Html.ActionLink("Manage", "ManageLogins") ]
-            </dd>
-            @*
-                Phone Numbers can used as a second factor of verification in a two-factor authentication system.
-                
-                See <a href="https://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
-                    for details on setting up this ASP.NET application to support two-factor authentication using SMS.
-                
-                Uncomment the following block after you have set up two-factor authentication
-            *@
-            @*  
-                <dt>Phone Number:</dt>
-                <dd>
-                    @(Model.PhoneNumber ?? "None")
-                    @if (Model.PhoneNumber != null)
+        @if (TempData["Success"] != null)
+        {
+            <div class="alert alert-success">@TempData["Success"]</div>
+        }
+        <p class="text-success">@ViewBag.StatusMessage</p>
+
+        @* ===== PROFILE INFORMATION ===== *@
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>Profile Information</h4>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    @if (user != null && !string.IsNullOrEmpty(user.PhotoUrl))
                     {
-                        <br />
-                        <text>[&nbsp;&nbsp;@Html.ActionLink("Change", "AddPhoneNumber")&nbsp;&nbsp;]</text>
-                        using (Html.BeginForm("RemovePhoneNumber", "Manage", FormMethod.Post, new { role = "form" }))
-                        {
-                            @Html.AntiForgeryToken()
-                            <text>[<input type="submit" value="Remove" class="btn-link" />]</text>
-                        }
+                        <div class="col-md-3 text-center">
+                            <img src="@user.PhotoUrl" alt="Profile Photo"
+                                 class="img-circle"
+                                 style="width:150px; height:150px; object-fit:cover; border:2px solid #ddd;" />
+                        </div>
+                        <div class="col-md-9">
+                            @Html.Partial("_ProfileDetails", user)
+                        </div>
                     }
                     else
                     {
-                        <text>[&nbsp;&nbsp;@Html.ActionLink("Add", "AddPhoneNumber")
+                        <div class="col-md-3 text-center">
+                            <div style="width:150px; height:150px; background:#eee; border-radius:50%; display:inline-block; line-height:150px; color:#999;">
+                                No Photo
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            @if (user != null)
+                            {
+                                @Html.Partial("_ProfileDetails", user)
+                            }
+                        </div>
                     }
-                </dd>
-            *@
-            <dt>Two-Factor Authentication:</dt>
-            <dd>
+                </div>
+
+                <hr />
                 <p>
-                    There are no two-factor authentication providers configured. See <a href="https://go.microsoft.com/fwlink/?LinkId=403804">this article</a>
-                    for details on setting up this ASP.NET application to support two-factor authentication.
+                    @Html.ActionLink("Edit Profile", "EditProfile", null, new { @class = "btn btn-primary" })
                 </p>
-                @*@if (Model.TwoFactor)
-                    {
-                        using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { role = "form" }))
+            </div>
+        </div>
+
+        @* ===== ACCOUNT SETTINGS ===== *@
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>Account Settings</h4>
+            </div>
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>Password:</dt>
+                    <dd>
+                        @if (Model.HasPassword)
                         {
-                            @Html.AntiForgeryToken()
-                            <text>Enabled
-                            <input type="submit" value="Disable" class="btn btn-link" />
-                            </text>
+                            @Html.ActionLink("Change your password", "ChangePassword", null, new { @class = "btn btn-default btn-sm" })
                         }
-                    }
-                    else
-                    {
-                        using (Html.BeginForm("EnableTwoFactorAuthentication", "Manage", FormMethod.Post, new { role = "form" }))
+                        else
                         {
-                            @Html.AntiForgeryToken()
-                            <text>Disabled
-                            <input type="submit" value="Enable" class="btn btn-link" />
-                            </text>
+                            @Html.ActionLink("Create a password", "SetPassword", null, new { @class = "btn btn-default btn-sm" })
                         }
-                    }*@
-            </dd>
-        </dl>
+                    </dd>
+
+                    <dt>External Logins:</dt>
+                    <dd>
+                        @Model.Logins.Count registered
+                        @Html.ActionLink("Manage", "ManageLogins", null, new { @class = "btn btn-default btn-sm" })
+                    </dd>
+
+                    <dt>Two-Factor Auth:</dt>
+                    <dd>
+                        <span class="text-muted">Not configured.</span>
+                    </dd>
+                </dl>
+            </div>
+        </div>
     </div>
 </main>
