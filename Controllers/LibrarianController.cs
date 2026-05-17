@@ -12,14 +12,10 @@ namespace LibrarySystem99.Controllers
 
         public ActionResult Index()
         {
-            var totalBooks = db.Books.Count();
-            var activeBorrows = db.BorrowingTransactions.Count(b => !b.IsReturned);
-            var overdueBooks = db.BorrowingTransactions.Count(b =>
+            ViewBag.TotalBooks = db.Books.Count();
+            ViewBag.ActiveBorrows = db.BorrowingTransactions.Count(b => !b.IsReturned);
+            ViewBag.OverdueBooks = db.BorrowingTransactions.Count(b =>
                 !b.IsReturned && b.DueDate < DateTime.Now);
-
-            ViewBag.TotalBooks = totalBooks;
-            ViewBag.ActiveBorrows = activeBorrows;
-            ViewBag.OverdueBooks = overdueBooks;
 
             var recentBorrows = db.BorrowingTransactions
                 .OrderByDescending(b => b.BorrowDate)
@@ -27,6 +23,15 @@ namespace LibrarySystem99.Controllers
                 .ToList();
 
             return View(recentBorrows);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

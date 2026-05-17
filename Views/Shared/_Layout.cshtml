@@ -21,16 +21,26 @@
                     <li>@Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("About", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+
                     @if (User.Identity.IsAuthenticated)
                     {
+                        @* ===== LIBRARIAN NAVIGATION ===== *@
                         if (User.IsInRole("Librarian"))
                         {
-                            <li>@Html.ActionLink("Librarian Dashboard", "LibrarianDashboard", "Home")</li>
+                            <li>@Html.ActionLink("Dashboard", "Index", "Librarian", null, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Books", "Index", "Books", null, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Borrowings", "Index", "BorrowingTransactions", null, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Fines", "Index", "Fines", null, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Policies", "Index", "BorrowingPolicies", null, new { @class = "nav-link" })</li>
                         }
 
+                        @* ===== MEMBER NAVIGATION ===== *@
                         if (User.IsInRole("Member"))
                         {
-                            <li>@Html.ActionLink("Member Dashboard", "MemberDashboard", "Home")</li>
+                            <li>@Html.ActionLink("Dashboard", "Index", "Member", null, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Browse Books", "Index", "Books", null, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("My Books", "MyBooks", "Books", null, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("My Fines", "Index", "Fines", null, new { @class = "nav-link" })</li>
                         }
                     }
                 </ul>

@@ -13,8 +13,7 @@ namespace LibrarySystem99.Controllers
     {
         public ActionResult Index()
         {
-            // checking whether the role exists, if not create a new role
-            // here i have added this line to test the git commit and push functionality
+            // Seed roles on first visit (idempotent)
             var context = new ApplicationDbContext();
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
 
@@ -27,35 +26,51 @@ namespace LibrarySystem99.Controllers
             {
                 roleManager.Create(new IdentityRole("Member"));
             }
+
+            // Redirect authenticated users to their role-specific dashboard
+            if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("Librarian"))
+                {
+                    return RedirectToAction("Index", "Librarian");
+                }
+
+                if (User.IsInRole("Member"))
+                {
+                    return RedirectToAction("Index", "Member");
+                }
+            }
+
+            // Anonymous users see the public landing page
             return View();
         }
 
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
-
             return View();
         }
 
         // GET: /Home/LibrarianDashboard
+        // Kept for backwards compatibility. Redirects to /Librarian/Index.
         [Authorize(Roles = "Librarian")]
         public ActionResult LibrarianDashboard()
         {
-            return View();
+            return RedirectToAction("Index", "Librarian");
         }
 
         // GET: /Home/MemberDashboard
+        // Kept for backwards compatibility. Redirects to /Member/Index.
         [Authorize(Roles = "Member")]
         public ActionResult MemberDashboard()
         {
-            return View();
+            return RedirectToAction("Index", "Member");
         }
     }
 }
