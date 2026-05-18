@@ -111,3 +111,139 @@ Six reports on one page with Chart.js visualizations:
 
 ## Screenshots
 
+
+
+<!-- Example markdown for embedding images:
+![Landing Page](docs/screenshots/landing.png)
+![Librarian Dashboard](docs/screenshots/librarian-dashboard.png)
+-->
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Visual Studio 2022 or later (2026 used in development)
+- .NET Framework 4.7.2 SDK
+- SQL Server Express LocalDB (included with Visual Studio)
+
+### Installation
+
+1. **Clone the repository**
+```bash
+   git clone https://github.com/Sulavss144/LibrarySystem99.git
+   cd LibrarySystem99
+```
+
+2. **Open the solution**
+   - Open `LibrarySystem99.slnx` in Visual Studio.
+
+3. **Restore NuGet packages**
+   - Right-click the solution → "Restore NuGet Packages"
+   - Or simply build the project (Ctrl+Shift+B) and packages will restore automatically.
+
+4. **Apply database migrations**
+   - Open **Tools → NuGet Package Manager → Package Manager Console**
+   - Make sure the Default project is set to `LibrarySystem99`
+   - Run:
+```powershell
+     Update-Database
+```
+   - This creates the LocalDB database and applies all migrations.
+
+5. **Run the project**
+   - Press **F5** (or click the Run button).
+   - The app opens at `https://localhost:44331/` (or similar).
+
+6. **First-time setup**
+   - On first visit, the system automatically seeds the Librarian and Member roles, plus a default borrowing policy.
+   - Register a new account using the **Register** button. Pick your role (Librarian or Member).
+
+---
+
+## Test Credentials
+
+If you want pre-seeded users for testing, register these accounts after the first run:
+
+| Email | Password | Role |
+|---|---|---|
+| `librarian@test.com` | `Pass@word1` | Librarian |
+| `test@test.com` | `Pass@word1` | Member |
+| `mem@test.com` | `Pass@word1` | Member |
+
+> Note: Identity password policy requires at least one uppercase, one digit, and one special character.
+
+---
+
+## Project Structure
+
+LibrarySystem99/
+├── Controllers/
+│   ├── AccountController.cs           # Login, register, password reset
+│   ├── BooksController.cs             # Books CRUD + borrow/return
+│   ├── BookReviewsController.cs       # Star ratings & reviews
+│   ├── BorrowingPoliciesController.cs # Single global policy editor
+│   ├── BorrowingTransactionsController.cs
+│   ├── FeedbackController.cs          # Website feedback moderation
+│   ├── FinesController.cs             # Fines management
+│   ├── HomeController.cs              # Landing page + role redirect
+│   ├── LibrarianController.cs         # Librarian dashboard
+│   ├── ManageController.cs            # Profile + account settings
+│   ├── MemberController.cs            # Member dashboard
+│   ├── MembersController.cs           # Librarian member management
+│   ├── ReportsController.cs           # Analytics & reports
+│   └── ReservationsController.cs      # Reservation queue
+├── Models/
+│   ├── ApplicationUser (IdentityModels.cs)
+│   ├── Book.cs
+│   ├── BookReview.cs
+│   ├── BorrowingPolicy.cs
+│   ├── BorrowingTransaction.cs
+│   ├── Fine.cs
+│   ├── Reservation.cs
+│   ├── WebsiteFeedback.cs
+│   ├── ReportsViewModel.cs
+│   └── ViewModels (Account, Manage, ...)
+├── Views/
+│   ├── Books/                         # Books CRUD + MyBooks
+│   ├── BookReviews/
+│   ├── BorrowingPolicies/
+│   ├── Feedback/
+│   ├── Home/                          # Landing, About, Contact
+│   ├── Librarian/                     # Librarian dashboard
+│   ├── Manage/                        # Profile + account settings
+│   ├── Member/                        # Member dashboard
+│   ├── Members/                       # Librarian member management
+│   ├── Reports/
+│   ├── Reservations/
+│   └── Shared/                        # _Layout, _BookReviews, _LoginPartial
+├── Migrations/                        # EF Code-First migrations
+├── App_Data/                          # LocalDB .mdf files
+├── Content/                           # CSS, images
+└── Scripts/                           # JavaScript libraries
+
+
+---
+
+## Team
+
+| Name | Student ID |
+|---|---|
+| Sulav | 20032639 |
+| Ashif | 20032206 |
+| Ehsan | 20032627 |
+| Manish | 20030726 |
+
+---
+
+## License
+
+This project was created for academic purposes at KOI Institute. Not licensed for commercial use.
+
+---
+
+## Acknowledgements
+
+- ASP.NET Identity scaffolding for the authentication foundation
+- Bootstrap for responsive UI components
+- Chart.js for the analytics visualizations on the Reports page
