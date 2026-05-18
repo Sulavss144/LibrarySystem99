@@ -1,133 +1,55 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using LibrarySystem99.Models;
 
 namespace LibrarySystem99.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Librarian,Admin")]
     public class BorrowingPoliciesController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
-        // GET: BorrowingPolicies
+        // GET: BorrowingPolicies — shows the current active policy
         public ActionResult Index()
         {
-            return View(db.BorrowingPolicies.ToList());
+            // Ensure a policy exists
+            PolicyHelper.EnsureDefaultPolicyExists(db);
+            var policy = db.BorrowingPolicies.FirstOrDefault();
+            return View(policy);
         }
 
-        // GET: BorrowingPolicies/Details/5
-        public ActionResult Details(int? id)
+        // GET: BorrowingPolicies/Edit
+        public ActionResult Edit()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            BorrowingPolicy borrowingPolicy = db.BorrowingPolicies.Find(id);
-            if (borrowingPolicy == null)
-            {
+            PolicyHelper.EnsureDefaultPolicyExists(db);
+            var policy = db.BorrowingPolicies.FirstOrDefault();
+            if (policy == null)
                 return HttpNotFound();
-            }
-            return View(borrowingPolicy);
+
+            return View(policy);
         }
 
-        // GET: BorrowingPolicies/Create
-        [Authorize(Roles ="Librarian")]
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: BorrowingPolicies/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles ="Librarian")]
+        // POST: BorrowingPolicies/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,MaxBooksPerUser,BorrowDays,MaxRenewals,FinePerDay")] BorrowingPolicy borrowingPolicy)
+        public ActionResult Edit([Bind(Include = "Id,MaxBooksPerUser,BorrowDays,MaxRenewals,FinePerDay")] BorrowingPolicy policy)
         {
             if (ModelState.IsValid)
             {
-                db.BorrowingPolicies.Add(borrowingPolicy);
+                db.Entry(policy).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
+                TempData["Success"] = "Policy updated successfully.";
                 return RedirectToAction("Index");
             }
-
-            return View(borrowingPolicy);
-        }
-
-        // GET: BorrowingPolicies/Edit/5
-        [Authorize(Roles = "Librarian")]
-        public ActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            BorrowingPolicy borrowingPolicy = db.BorrowingPolicies.Find(id);
-            if (borrowingPolicy == null)
-            {
-                return HttpNotFound();
-            }
-            return View(borrowingPolicy);
-        }
-
-        // POST: BorrowingPolicies/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Librarian")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,MaxBooksPerUser,BorrowDays,MaxRenewals,FinePerDay")] BorrowingPolicy borrowingPolicy)
-        {
-            if (ModelState.IsValid)
-            {
-                db.Entry(borrowingPolicy).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(borrowingPolicy);
-        }
-
-        // GET: BorrowingPolicies/Delete/5
-        [Authorize(Roles = "Librarian")]
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            BorrowingPolicy borrowingPolicy = db.BorrowingPolicies.Find(id);
-            if (borrowingPolicy == null)
-            {
-                return HttpNotFound();
-            }
-            return View(borrowingPolicy);
-        }
-
-        // POST: BorrowingPolicies/Delete/5
-        [Authorize(Roles = "Librarian")]
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            BorrowingPolicy borrowingPolicy = db.BorrowingPolicies.Find(id);
-            db.BorrowingPolicies.Remove(borrowingPolicy);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            return View(policy);
         }
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
-            {
                 db.Dispose();
-            }
             base.Dispose(disposing);
         }
     }

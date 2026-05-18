@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Entity;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace LibrarySystem99.Models
 {
@@ -62,6 +63,44 @@ namespace LibrarySystem99.Models
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
+        }
+    }
+    public static class PolicyHelper
+    {
+        // Default fallbacks if no policy is configured yet
+        public const int DefaultMaxBooksPerUser = 3;
+        public const int DefaultBorrowDays = 14;
+        public const int DefaultMaxRenewals = 2;
+        public const decimal DefaultFinePerDay = 1.00m;
+
+        public static BorrowingPolicy GetActivePolicy(ApplicationDbContext db)
+        {
+            // Use the first policy in the DB; fall back to defaults if none exists
+            var policy = db.BorrowingPolicies.FirstOrDefault();
+            if (policy != null) return policy;
+
+            return new BorrowingPolicy
+            {
+                MaxBooksPerUser = DefaultMaxBooksPerUser,
+                BorrowDays = DefaultBorrowDays,
+                MaxRenewals = DefaultMaxRenewals,
+                FinePerDay = DefaultFinePerDay
+            };
+        }
+
+        public static void EnsureDefaultPolicyExists(ApplicationDbContext db)
+        {
+            if (!db.BorrowingPolicies.Any())
+            {
+                db.BorrowingPolicies.Add(new BorrowingPolicy
+                {
+                    MaxBooksPerUser = DefaultMaxBooksPerUser,
+                    BorrowDays = DefaultBorrowDays,
+                    MaxRenewals = DefaultMaxRenewals,
+                    FinePerDay = DefaultFinePerDay
+                });
+                db.SaveChanges();
+            }
         }
     }
 }

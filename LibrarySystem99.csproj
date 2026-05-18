@@ -174,6 +174,7 @@
     <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\MembersController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
+    <Compile Include="Controllers\ReservationsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -204,6 +205,10 @@
     <Compile Include="Migrations\202605171456095_AddBookReviews.cs" />
     <Compile Include="Migrations\202605171456095_AddBookReviews.Designer.cs">
       <DependentUpon>202605171456095_AddBookReviews.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202605180132290_UpgradeRversations.cs" />
+    <Compile Include="Migrations\202605180132290_UpgradeRversations.Designer.cs">
+      <DependentUpon>202605180132290_UpgradeRversations.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -329,6 +334,8 @@
     <Content Include="Views\BookReviews\Edit.cshtml" />
     <Content Include="Views\BookReviews\Index.cshtml" />
     <Content Include="Views\Shared\_BookReviews.cshtml" />
+    <Content Include="Views\Reservations.cshtml" />
+    <Content Include="Views\Reservations\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -381,6 +388,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202605171456095_AddBookReviews.resx">
       <DependentUpon>202605171456095_AddBookReviews.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202605180132290_UpgradeRversations.resx">
+      <DependentUpon>202605180132290_UpgradeRversations.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

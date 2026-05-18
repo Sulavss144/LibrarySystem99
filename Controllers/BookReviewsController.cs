@@ -57,14 +57,15 @@ namespace LibrarySystem99.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "BookId,Rating,ReviewText")] BookReview review)
         {
-            // UserId is set from the logged-in user, not the form — remove its validation error
+            // Set UserId BEFORE validation, since it's required on the model but not in the form
+            review.UserId = User.Identity.GetUserId();
+            review.CreatedDate = DateTime.Now;
+
+            // Remove validation error for UserId (we just set it)
             ModelState.Remove("UserId");
 
             if (ModelState.IsValid)
             {
-                review.UserId = User.Identity.GetUserId();
-                review.CreatedDate = DateTime.Now;
-
                 // Double-check no duplicate (in case of race condition)
                 var existing = db.BookReviews
                     .FirstOrDefault(r => r.BookId == review.BookId && r.UserId == review.UserId);
@@ -91,50 +92,19 @@ namespace LibrarySystem99.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,BookId,Rating,ReviewText")] BookReview review)
         {
-            // UserId isn't part of the form — clear the validation error
+            var existing = db.BookReviews.Find(review.Id);
+            if (existing == null)
+                return HttpNotFound();
+
+            // Ownership check
+            var userId = User.Identity.GetUserId();
+            if (existing.UserId != userId && !User.IsInRole("Librarian") && !User.IsInRole("Admin"))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+
+            // UserId isn't in the form, so clear its validation error
             ModelState.Remove("UserId");
-
-            var existing = db.BookReviews.Find(review.Id);
-            if (existing == null)
-                return HttpNotFound();
-
-            // Ownership check
-            var userId = User.Identity.GetUserId();
-            if (existing.UserId != userId && !User.IsInRole("Librarian") && !User.IsInRole("Admin"))
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
-            }
-
-            if (ModelState.IsValid)
-            {
-                existing.Rating = review.Rating;
-                existing.ReviewText = review.ReviewText;
-                existing.UpdatedDate = DateTime.Now;
-                db.SaveChanges();
-
-                TempData["Success"] = "Review updated.";
-                return RedirectToAction("Details", "Books", new { id = existing.BookId });
-            }
-
-            ViewBag.Book = db.Books.Find(review.BookId);
-            return View(review);
-        }
-
-        // POST: /BookReviews/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,BookId,Rating,ReviewText")] BookReview review)
-        {
-            var existing = db.BookReviews.Find(review.Id);
-            if (existing == null)
-                return HttpNotFound();
-
-            // Ownership check
-            var userId = User.Identity.GetUserId();
-            if (existing.UserId != userId && !User.IsInRole("Librarian") && !User.IsInRole("Admin"))
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
-            }
 
             if (ModelState.IsValid)
             {

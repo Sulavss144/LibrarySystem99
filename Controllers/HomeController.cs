@@ -27,6 +27,9 @@ namespace LibrarySystem99.Controllers
                 roleManager.Create(new IdentityRole("Member"));
             }
 
+            // Seed default borrowing policy if none exists
+            PolicyHelper.EnsureDefaultPolicyExists(context);
+
             // Redirect authenticated users to their role-specific dashboard
             if (User.Identity.IsAuthenticated)
             {
@@ -41,7 +44,6 @@ namespace LibrarySystem99.Controllers
                 }
             }
 
-            // Anonymous users see the public landing page
             return View();
         }
 

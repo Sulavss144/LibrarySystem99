@@ -5,6 +5,21 @@
 }
 
 <h2>Books</h2>
+@using (Html.BeginForm("Index", "Books", FormMethod.Get, new { @class = "form-inline", style = "margin-bottom: 20px;" }))
+{
+    <div class="form-group">
+        <input type="text" name="searchQuery" value="@ViewBag.SearchQuery" class="form-control" placeholder="Search by title or author..." style="width: 300px;" />
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+    if (!string.IsNullOrWhiteSpace(ViewBag.SearchQuery as string))
+    {
+        @Html.ActionLink("Clear", "Index", null, new { @class = "btn btn-default" })
+        <span class="text-muted" style="margin-left:10px;">
+            Showing results for <strong>"@ViewBag.SearchQuery"</strong>
+        </span>
+    }
+}
+
 
 @if (TempData["Error"] != null)
 {
@@ -76,13 +91,20 @@
 
                     if (item.AvailableCopies > 0)
                     {
-                        @Html.ActionLink("Borrow", "Borrow",
+                        @Html.ActionLink("Borrow", "Borrow", "Books",
                             new { id = item.Id },
                             new { @class = "btn btn-success btn-sm" })
                     }
                     else
                     {
-                        <span class="text-danger">Not Available</span>
+                        using (Html.BeginForm("Create", "Reservations", FormMethod.Post, new { style = "display:inline;" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="bookId" value="@item.Id" />
+                            <button type="submit" class="btn btn-warning btn-sm" title="Reserve this book — you'll be added to the queue">
+                                Reserve
+                            </button>
+                        }
                     }
                 }
             </td>

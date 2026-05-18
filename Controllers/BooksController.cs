@@ -15,13 +15,24 @@ namespace LibrarySystem99.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Books
-        public ActionResult Index()
+        public ActionResult Index(string searchQuery)
         {
-            return View(db.Books.ToList());
+            var books = db.Books.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchQuery))
+            {
+                var q = searchQuery.Trim();
+                books = books.Where(b =>
+                    b.Title.Contains(q) ||
+                    b.Author.Contains(q));
+            }
+
+            ViewBag.SearchQuery = searchQuery;
+            return View(books.ToList());
         }
 
         // GET: Details
-       
+
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -129,43 +140,6 @@ namespace LibrarySystem99.Controllers
             return RedirectToAction("Index");
         }
 
-        // =========================================
-        // 🔥 BORROW BOOK SYSTEM (NEW)
-        // =========================================
-
-        [Authorize(Roles = "Member")]
-        public ActionResult Borrow(int id)
-        {
-            var book = db.Books.Find(id);
-
-            if (book == null)
-                return HttpNotFound();
-
-            if (book.AvailableCopies <= 0)
-            {
-                TempData["Error"] = "No copies available!";
-                return RedirectToAction("Index");
-            }
-
-            var userId = User.Identity.GetUserId();
-
-            var borrow = new BorrowingTransaction
-            {
-                BookId = book.Id,
-                UserId = userId,
-                BorrowDate = DateTime.Now,
-                DueDate = DateTime.Now.AddDays(14),
-                IsReturned = false,
-                RenewalCount = 0
-            };
-
-            book.AvailableCopies--;
-
-            db.BorrowingTransactions.Add(borrow);
-            db.SaveChanges();
-
-            return RedirectToAction("MyBooks");
-        }
 
         // =========================================
         // 🔥 USER BORROWED BOOKS
@@ -185,7 +159,71 @@ namespace LibrarySystem99.Controllers
         }
 
         // =========================================
-        // 🔥 RETURN BOOK SYSTEM
+        // BORROW BOOK SYSTEM
+        // =========================================
+
+        [Authorize(Roles = "Member")]
+        public ActionResult Borrow(int id)
+        {
+            var book = db.Books.Find(id);
+
+            if (book == null)
+                return HttpNotFound();
+
+            if (book.AvailableCopies <= 0)
+            {
+                TempData["Error"] = "No copies available!";
+                return RedirectToAction("Index");
+            }
+
+            var userId = User.Identity.GetUserId();
+
+            // ===== POLICY ENFORCEMENT =====
+            var policy = PolicyHelper.GetActivePolicy(db);
+
+            // Check max books per user
+            var activeBorrows = db.BorrowingTransactions
+                .Count(b => b.UserId == userId && !b.IsReturned);
+
+            if (activeBorrows >= policy.MaxBooksPerUser)
+            {
+                TempData["Error"] = $"You've reached the borrowing limit of {policy.MaxBooksPerUser} books. Please return a book before borrowing another.";
+                return RedirectToAction("Index");
+            }
+
+            // Check for unpaid fines (optional but realistic)
+            var unpaidFines = db.Fines
+                .Where(f => !f.IsPaid && f.BorrowingTransaction.UserId == userId)
+                .Sum(f => (decimal?)f.Amount) ?? 0m;
+
+            if (unpaidFines > 0)
+            {
+                TempData["Error"] = $"You have unpaid fines totaling ${unpaidFines}. Please pay your fines before borrowing.";
+                return RedirectToAction("Index");
+            }
+
+            // ===== CREATE BORROW USING POLICY =====
+            var borrow = new BorrowingTransaction
+            {
+                BookId = book.Id,
+                UserId = userId,
+                BorrowDate = DateTime.Now,
+                DueDate = DateTime.Now.AddDays(policy.BorrowDays),
+                IsReturned = false,
+                RenewalCount = 0
+            };
+
+            book.AvailableCopies--;
+
+            db.BorrowingTransactions.Add(borrow);
+            db.SaveChanges();
+
+            TempData["Success"] = $"Book borrowed successfully. Due date: {borrow.DueDate.ToShortDateString()}.";
+            return RedirectToAction("MyBooks");
+        }
+
+        // =========================================
+        // RETURN BOOK SYSTEM (with auto-fine)
         // =========================================
 
         [Authorize(Roles = "Member")]
@@ -202,11 +240,51 @@ namespace LibrarySystem99.Controllers
             {
                 borrow.IsReturned = true;
                 borrow.ReturnDate = DateTime.Now;
-
                 borrow.Book.AvailableCopies++;
-            }
 
-            db.SaveChanges();
+                // ===== AUTO-FINE IF OVERDUE =====
+                if (borrow.ReturnDate.Value > borrow.DueDate)
+                {
+                    var daysLate = (borrow.ReturnDate.Value - borrow.DueDate).Days;
+                    if ((borrow.ReturnDate.Value - borrow.DueDate).TotalHours > 0 && daysLate == 0)
+                    {
+                        daysLate = 1;
+                    }
+
+                    var policy = PolicyHelper.GetActivePolicy(db);
+                    var fineAmount = daysLate * policy.FinePerDay;
+
+                    var fine = new Fine
+                    {
+                        BorrowingTransactionId = borrow.Id,
+                        Amount = fineAmount,
+                        IsPaid = false,
+                        CreatedDate = DateTime.Now
+                    };
+                    db.Fines.Add(fine);
+
+                    TempData["Error"] = $"Book returned {daysLate} day(s) late. A fine of ${fineAmount} has been added to your account.";
+                }
+                else
+                {
+                    TempData["Success"] = "Book returned on time. Thank you!";
+                }
+
+                // ===== AUTO-PROMOTE NEXT RESERVATION =====
+                var nextReservation = db.Reservations
+                    .Where(r => r.BookId == borrow.BookId && r.Status == ReservationStatus.Waiting)
+                    .OrderBy(r => r.ReservationDate)
+                    .FirstOrDefault();
+
+                if (nextReservation != null)
+                {
+                    nextReservation.Status = ReservationStatus.Ready;
+                    nextReservation.ReadyDate = DateTime.Now;
+                    // Don't decrement AvailableCopies — it's still technically available until fulfilled
+                }
+
+                db.SaveChanges();
+            }
 
             return RedirectToAction("MyBooks");
         }

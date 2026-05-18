@@ -1,58 +1,68 @@
-﻿@model IEnumerable<LibrarySystem99.Models.BorrowingPolicy>
+﻿@model LibrarySystem99.Models.BorrowingPolicy
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Borrowing Policy";
 }
 
-<h2>Index</h2>
+<div class="container">
+    <h2>Library Borrowing Policy</h2>
+    <p class="text-muted">These rules apply to all members.</p>
 
-<p>
-    @if (User.IsInRole("Librarian"))
+    @if (TempData["Success"] != null)
     {
-        @Html.ActionLink("Create New", "Create")
+        <div class="alert alert-success">@TempData["Success"]</div>
     }
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.MaxBooksPerUser)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.BorrowDays)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.MaxRenewals)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FinePerDay)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.MaxBooksPerUser)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BorrowDays)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.MaxRenewals)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.FinePerDay)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-            @if (User.IsInRole("Librarian"))
-            {
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) 
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-            }
+    @if (Model == null)
+    {
+        <p class="text-warning">No policy configured.</p>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading"><h4>Max Books Per User</h4></div>
+                    <div class="panel-body text-center">
+                        <h1 style="margin:0;">@Model.MaxBooksPerUser</h1>
+                        <p class="text-muted">simultaneous borrows allowed</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-info">
+                    <div class="panel-heading"><h4>Loan Period</h4></div>
+                    <div class="panel-body text-center">
+                        <h1 style="margin:0;">@Model.BorrowDays</h1>
+                        <p class="text-muted">days per borrow</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-success">
+                    <div class="panel-heading"><h4>Max Renewals</h4></div>
+                    <div class="panel-body text-center">
+                        <h1 style="margin:0;">@Model.MaxRenewals</h1>
+                        <p class="text-muted">renewals per borrow</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-danger">
+                    <div class="panel-heading"><h4>Late Fine</h4></div>
+                    <div class="panel-body text-center">
+                        <h1 style="margin:0;">$@Model.FinePerDay</h1>
+                        <p class="text-muted">per day overdue</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        </td>
-    </tr>
-}
-
-</table>
+        <p>
+            @Html.ActionLink("Edit Policy", "Edit", null, new { @class = "btn btn-warning" })
+            @Html.ActionLink("« Back to Dashboard", "Index", "Librarian", null, new { @class = "btn btn-default" })
+        </p>
+    }
+</div>
