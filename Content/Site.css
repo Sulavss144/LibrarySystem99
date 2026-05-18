@@ -789,6 +789,53 @@ textarea {
         box-shadow: 0 0 5px rgba(37,99,235,0.3);
         outline: none;
     }
+/* ===== PROFILE PAGE ===== */
+
+.profile-page h2 {
+    color: #2f6b2f;
+    font-weight: 700;
+}
+
+.profile-card {
+    border: 1px solid #d8ead8;
+    border-radius: 12px;
+    padding: 25px;
+    background: white;
+    margin-bottom: 25px;
+}
+
+.profile-info {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+}
+
+.profile-photo {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: #eef7ea;
+    color: #777;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #d8ead8;
+}
+
+.profile-details p {
+    margin-bottom: 14px;
+}
+
+.profile-details strong {
+    color: #2f6b2f;
+}
+
+.account-settings-box {
+    border: 1px solid #d8ead8;
+    border-radius: 12px;
+    padding: 22px;
+    background: #fbfffa;
+}
 
 /* ===== LINKS ===== */
 
