@@ -4,19 +4,22 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div class="page-header-box">
+    <h2>Fines Management</h2>
+    <p>Track member fines, payment status, and overdue penalties.</p>
+</div>
 
 <p>
-    @if (User.IsInRole("Librarian"))
-    {
-        @Html.ActionLink("Create New", "Create")
-    }
+    @Html.ActionLink("Create New", "Create",
+        null,
+        new { @class = "btn btn-primary" })
+</p>
     </p>
-<table class="table">
+<table class="table fine-table">
     <tr>
-        
+
         <th>User</th>
-       
+
         <th>
             @Html.DisplayNameFor(model => model.Amount)
         </th>
@@ -29,38 +32,46 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-      <td>
-          @item.BorrowingTransaction.User.UserName
-      </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Amount)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsPaid)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CreatedDate)
-        </td>
-        
-        <td>
-            @if (User.IsInRole("Librarian"))
-            {
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) <text> | </text>
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id }) <text> | </text>
-            }
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @item.BorrowingTransaction.User.UserName
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @if (item.IsPaid)
+                {
+                    <span class="fine-paid">Paid</span>
+                }
+                else
+                {
+                    <span class="fine-unpaid">Unpaid</span>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedDate)
+            </td>
 
-            @Html.ActionLink("Details", "Details", new { id = item.Id })
+            <td>
+                @if (User.IsInRole("Librarian"))
+                {
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) <text> | </text>
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }) <text> | </text>
+                }
 
-            @if ((User.IsInRole("Member") || User.IsInRole("Librarian")) && !item.IsPaid)
-            {
-                <text> | </text>
-                @Html.ActionLink("Pay", "Pay", new { id = item.Id })
-            }
-        </td>
-        
-    </tr>
-}
+                @Html.ActionLink("Details", "Details", new { id = item.Id })
+
+                @if ((User.IsInRole("Member") || User.IsInRole("Librarian")) && !item.IsPaid)
+                {
+                    <text> | </text>
+                    @Html.ActionLink("Pay", "Pay", new { id = item.Id })
+                }
+            <td class="fine-actions">
+
+        </tr>
+    }
 
 </table>

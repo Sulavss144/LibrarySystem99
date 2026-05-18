@@ -4,12 +4,15 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<div class="page-header-box">
+    <h2>Borrowing Transactions</h2>
+    <p>View and manage book borrowing records.</p>
+</div>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
+<table class="table clean-table">
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.BookId)
@@ -35,47 +38,48 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.BookId)
-        </td>
-        <td>
-            @item.User.UserName
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.BorrowDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DueDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ReturnDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsReturned)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.RenewalCount)
-        </td>
-        <td>
-       
-            @if (User.IsInRole("Librarian"))
-            {
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) <text> | </text>
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id }) <text> | </text>
-            }
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.BookId)
+            </td>
+            <td>
+                @item.User.UserName
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BorrowDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DueDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReturnDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsReturned)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RenewalCount)
+            </td>
+            <td>
 
-            @Html.ActionLink("Details", "Details", new { id = item.Id })
+                @if (User.IsInRole("Librarian"))
+                {
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) <text> | </text>
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id }) <text> | </text>
+                }
 
-            @if (User.IsInRole("Member") || User.IsInRole("Librarian"))
-            {
-                <text> | </text>
-                @Html.ActionLink("Return", "Return", new { id = item.Id })
-            }
-       
-        </td>
-    </tr>
-}
+                @Html.ActionLink("Details", "Details", new { id = item.Id })
+
+                @if (User.IsInRole("Member") || User.IsInRole("Librarian"))
+                {
+                    <text> | </text>
+                    @Html.ActionLink("Return", "Return", new { id = item.Id })
+                }
+
+            </td>
+        </tr>
+    }
 
 </table>

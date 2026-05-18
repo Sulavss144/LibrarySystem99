@@ -69,42 +69,42 @@
 
     @if (Model != null && Model.Any())
     {
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Book</th>
-                    <th>User</th>
-                    <th>Borrow Date</th>
-                    <th>Due Date</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@(item.Book != null ? item.Book.Title : "—")</td>
-                        <td>@(item.User != null ? item.User.Email : "—")</td>
-                        <td>@item.BorrowDate</td>
-                        <td>@item.DueDate</td>
-                        <td>
-                            @if (item.IsReturned)
-                            {
-                                <span style="color:green">Returned</span>
-                            }
-                            else if (item.DueDate < DateTime.Now)
-                            {
-                                <span style="color:red">Overdue</span>
-                            }
-                            else
-                            {
-                                <span style="color:orange">Active</span>
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+       <table class="recent-table">
+           <thead>
+               <tr>
+                   <th>Book</th>
+                   <th>User</th>
+                   <th>Borrow Date</th>
+                   <th>Due Date</th>
+                   <th>Status</th>
+               </tr>
+           </thead>
+           <tbody>
+               @foreach (var item in Model)
+               {
+                   <tr>
+                       <td>@(item.Book != null ? item.Book.Title : "—")</td>
+                       <td>@(item.User != null ? item.User.Email : "—")</td>
+                       <td>@item.BorrowDate</td>
+                       <td>@item.DueDate</td>
+                       <td>
+                           @if (item.IsReturned)
+                           {
+                               <span style="color:green">Returned</span>
+                           }
+                           else if (item.DueDate < DateTime.Now)
+                           {
+                               <span style="color:red">Overdue</span>
+                           }
+                           else
+                           {
+                               <span style="color:orange">Active</span>
+                           }
+                       </td>
+                   </tr>
+               }
+           </tbody>
+       </table>
     }
     else
     {

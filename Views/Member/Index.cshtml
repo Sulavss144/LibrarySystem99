@@ -89,15 +89,15 @@
                         <td>
                             @if (item.IsReturned)
                             {
-                                <span style="color:green">Returned</span>
+                                <span class="status-returned">Returned</span>
                             }
                             else if (item.DueDate < DateTime.Now)
                             {
-                                <span style="color:red">Overdue</span>
+                                <span class="status-overdue">Overdue</span>
                             }
                             else
                             {
-                                <span style="color:blue">Active</span>
+                                <span class="status-active">Active</span>
                             }
                         </td>
                         <td>

@@ -21,16 +21,16 @@
     {
         <div class="row">
             <div class="col-md-6">
-                <div class="panel panel-primary">
+                <div class="policy-box">
                     <div class="panel-heading"><h4>Max Books Per User</h4></div>
-                    <div class="panel-body text-center">
+                    <div class="text-center">
                         <h1 style="margin:0;">@Model.MaxBooksPerUser</h1>
                         <p class="text-muted">simultaneous borrows allowed</p>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="panel panel-info">
+                <div class="policy-box">
                     <div class="panel-heading"><h4>Loan Period</h4></div>
                     <div class="panel-body text-center">
                         <h1 style="margin:0;">@Model.BorrowDays</h1>
@@ -41,7 +41,7 @@
         </div>
         <div class="row">
             <div class="col-md-6">
-                <div class="panel panel-success">
+                <div class="policy-box">
                     <div class="panel-heading"><h4>Max Renewals</h4></div>
                     <div class="panel-body text-center">
                         <h1 style="margin:0;">@Model.MaxRenewals</h1>
@@ -50,11 +50,12 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="panel panel-danger">
-                    <div class="panel-heading"><h4>Late Fine</h4></div>
+                <div class="policy-box">
+                    <div>
+                    <h4>Late Fine</h4></div>
                     <div class="panel-body text-center">
-                        <h1 style="margin:0;">$@Model.FinePerDay</h1>
-                        <p class="text-muted">per day overdue</p>
+                        <h1 class="policy-value">$@Model.FinePerDay</h1>
+                        <p class="policy-text">per day overdue</p>
                     </div>
                 </div>
             </div>

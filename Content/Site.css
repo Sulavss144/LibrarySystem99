@@ -29,6 +29,47 @@ textarea {
     border: 1px solid #ccc;
     padding: 8px;
 }
+.status-active {
+    color: #198754;
+    font-weight: 600;
+}
+
+.status-returned {
+    color: #0d6efd;
+    font-weight: 600;
+}
+
+.status-overdue {
+    color: #dc3545;
+    font-weight: 600;
+}
+/*  */
+#logoutForm {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+    #logoutForm ul,
+    #logoutForm li {
+        background: transparent !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+.user-nav {
+    background: transparent !important;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+    .user-nav a {
+        color: white !important;
+        font-weight: 600;
+    }
 /* ===== USER NAV ===== */
 
 .user-nav {
@@ -78,6 +119,79 @@ textarea {
         background-color: #1e40af;
         color: white;
     }
+/* ===== STATUS BADGES ===== */
+
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-block;
+    min-width: 80px;
+    text-align: center;
+}
+
+    /* Active */
+
+    .status-badge.active {
+        background: #e8f7e8;
+        color: #2f8f2f;
+        border: 1px solid #b7e0b7;
+    }
+
+    /* Returned */
+
+    .status-badge.returned {
+        background: #ffeaea;
+        color: #cc2f2f;
+        border: 1px solid #f0b1b1;
+    }
+
+    /* Overdue */
+
+    .status-badge.overdue {
+        background: #fff0d9;
+        color: #c46b00;
+        border: 1px solid #f2cf94;
+    }
+.inline-form {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+/* ===== BORROWING POLICY PAGE ===== */
+
+.policy-box {
+    border: 1px solid #d8ead8;
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 20px;
+    background: white;
+}
+
+    .policy-box h3 {
+        color: #2f6b2f;
+        font-weight: 700;
+    }
+
+.policy-value {
+    font-size: 34px;
+    font-weight: 700;
+    color: #2f6b2f;
+    text-align: center;
+}
+
+.policy-text {
+    text-align: center;
+    color: #555;
+}
+
+.policy-actions {
+    margin-top: 20px;
+}
 /* ===== PAGE STYLE ===== */
 
 body {
@@ -95,7 +209,287 @@ body {
     margin-top: 30px;
     box-shadow: 0 5px 18px rgba(0,0,0,0.08);
 }
+/* ===== LIBRARIAN DASHBOARD CLEAN STYLE ===== */
 
+.dashboard-page {
+    max-width: 1100px;
+    margin: 35px auto;
+    padding: 30px;
+}
+
+.dashboard-header h1 {
+    color: #2f6b2f;
+    font-weight: 700;
+}
+
+.dashboard-header p {
+    color: #555;
+}
+
+.dashboard-stats,
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+    margin: 25px 0;
+}
+
+.dashboard-stat-box,
+.dashboard-card {
+    border: 1px solid #d8ead8;
+    border-radius: 12px;
+    padding: 22px;
+    background: white;
+}
+
+.dashboard-stat-box {
+    text-align: center;
+}
+
+    .dashboard-stat-box h3 {
+        font-size: 18px;
+        color: #333;
+    }
+
+    .dashboard-stat-box strong {
+        font-size: 30px;
+        color: #2f6b2f;
+    }
+
+.dashboard-card h3 {
+    color: #2f6b2f;
+    font-weight: 700;
+}
+
+.dashboard-card p {
+    color: #444;
+    line-height: 1.7;
+}
+
+.recent-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+    .recent-table th {
+        background: #f4fff0;
+        color: #2f6b2f;
+        padding: 12px;
+        border: 1px solid #d8ead8;
+    }
+
+    .recent-table td {
+        padding: 12px;
+        border: 1px solid #e1e1e1;
+        color: black;
+    }
+
+    .recent-table tr:hover {
+        background: #fbfffa;
+    }
+
+.dashboard-note {
+    margin-top: 20px;
+    border-left: 5px solid #56ab2f;
+    background: #f8fff5;
+    padding: 15px;
+    border-radius: 8px;
+}
+/* ===== FORCE LIBRARIAN DASHBOARD STYLE ===== */
+
+.recent-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin-top: 20px !important;
+    background: white !important;
+}
+
+    .recent-table th {
+        background-color: #eef8ea !important;
+        color: #2f6b2f !important;
+        padding: 14px !important;
+        border: 1px solid #d6e8d2 !important;
+        font-weight: 700 !important;
+    }
+
+    .recent-table td {
+        padding: 14px !important;
+        border: 1px solid #e2e2e2 !important;
+        color: #222 !important;
+    }
+
+    .recent-table tr:hover {
+        background-color: #f9fff7 !important;
+    }
+
+.dashboard-card {
+    background: white !important;
+    border: 1px solid #dcead8 !important;
+    border-radius: 12px !important;
+    padding: 22px !important;
+}
+
+    .dashboard-card h3 {
+        color: #2f6b2f !important;
+        font-weight: 700 !important;
+    }
+
+    .dashboard-card p {
+        color: #444 !important;
+        line-height: 1.7 !important;
+    }
+/* ===== BORROWING TRANSACTIONS PAGE ===== */
+
+.page-header-box h2 {
+    color: #2f6b2f;
+    font-weight: 700;
+}
+
+.page-header-box p {
+    color: #555;
+}
+
+.clean-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    margin-top: 20px;
+}
+
+    .clean-table th {
+        background: #f4fff0;
+        color: #2f6b2f;
+        padding: 14px;
+        border: 1px solid #d8ead8;
+    }
+
+    .clean-table td {
+        padding: 14px;
+        border: 1px solid #e1e1e1;
+        color: #222;
+    }
+
+    .clean-table tr:hover {
+        background: #fbfffa;
+    }
+
+    .clean-table a {
+        color: #2f6b2f;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .clean-table a:hover {
+            text-decoration: underline;
+        }
+/* ===== BOOKS PAGE ===== */
+
+.books-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    margin-top: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+    .books-table th {
+        background: #f4fff0;
+        color: #2f6b2f;
+        padding: 15px;
+        border: 1px solid #d8ead8;
+        font-weight: 700;
+    }
+
+    .books-table td {
+        padding: 14px;
+        border: 1px solid #e6e6e6;
+        color: #333;
+    }
+
+    .books-table tr:hover {
+        background: #fbfffa;
+        transition: 0.2s;
+    }
+
+    /* action buttons */
+
+    .books-table td a {
+        display: inline-block;
+        margin: 2px;
+        padding: 8px 14px;
+        border-radius: 6px;
+        background: #f56600;
+        color: white !important;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+        .books-table td a:hover {
+            background: #d95500;
+            transform: translateY(-1px);
+        }
+.search-result-text {
+    margin-left: 10px;
+}
+
+.availability {
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-weight: 600;
+}
+
+    .availability.available {
+        background: #e8f7e8;
+        color: #2f8f2f;
+    }
+
+    .availability.unavailable {
+        background: #ffeaea;
+        color: #cc2f2f;
+    }
+
+.action-links .btn {
+    margin: 3px;
+}
+
+.inline-form {
+    display: inline;
+}
+
+/* search box */
+
+.search-box {
+    background: white;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+    margin-bottom: 25px;
+}
+
+    .search-box input {
+        width: 320px;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        margin-right: 10px;
+    }
+
+    .search-box button {
+        padding: 11px 22px;
+        border: none;
+        border-radius: 8px;
+        background: #f56600;
+        color: white;
+        font-weight: 600;
+    }
+
+        .search-box button:hover {
+            background: #d95500;
+        }
 /* ===== HEADINGS ===== */
 
 h1, h2, h3 {
