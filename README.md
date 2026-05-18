@@ -229,10 +229,9 @@ LibrarySystem99/
 
 | Name | Student ID |
 |---|---|
-| Sulav | 20032639 |
-| Ashif | 20032206 |
-| Ehsan | 20032627 |
-| Manish | 20030726 |
+| Sulav | x |
+| Ehsan | x |
+
 
 ---
 
