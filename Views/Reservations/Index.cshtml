@@ -47,39 +47,43 @@
                         }
                         <td>@r.ReservationDate.ToShortDateString()</td>
                         <td>
-                            @switch (r.Status)
+                            @if (r.Status == LibrarySystem99.Models.ReservationStatus.Waiting)
                             {
-                                case LibrarySystem99.Models.ReservationStatus.Waiting:
-                                    <span class="label label-info">Waiting</span>
-                                    break;
-                                case LibrarySystem99.Models.ReservationStatus.Ready:
-                                    <span class="label label-success">Ready for Pickup</span>
-                                    break;
-                                case LibrarySystem99.Models.ReservationStatus.Fulfilled:
-                                    <span class="label label-default">Fulfilled</span>
-                                    break;
-                                case LibrarySystem99.Models.ReservationStatus.Cancelled:
-                                    <span class="label label-default">Cancelled</span>
-                                    break;
+                                <span class="label label-info">Waiting</span>
+                            }
+                            else if (r.Status == LibrarySystem99.Models.ReservationStatus.Ready)
+                            {
+                                <span class="label label-success">Ready for Pickup</span>
+                            }
+                            else if (r.Status == LibrarySystem99.Models.ReservationStatus.Fulfilled)
+                            {
+                                <span class="label label-default">Fulfilled</span>
+                            }
+                            else if (r.Status == LibrarySystem99.Models.ReservationStatus.Cancelled)
+                            {
+                                <span class="label label-default">Cancelled</span>
                             }
                         </td>
                         <td>
                             @if (r.Status == LibrarySystem99.Models.ReservationStatus.Ready)
                             {
-                                using (Html.BeginForm("Fulfill", "Reservations", new { id = r.Id }, FormMethod.Post, new { style = "display:inline;" }))
-                                {
+                                <form action="@Url.Action("Fulfill", "Reservations", new { id = r.Id })" method="post" style="display:inline;">
                                     @Html.AntiForgeryToken()
                                     <button type="submit" class="btn btn-success btn-sm">Pick Up / Borrow</button>
-                                }
+                                </form>
                             }
 
-                            if (r.Status == LibrarySystem99.Models.ReservationStatus.Waiting || r.Status == LibrarySystem99.Models.ReservationStatus.Ready)
+                            @if (r.Status == LibrarySystem99.Models.ReservationStatus.Waiting || r.Status == LibrarySystem99.Models.ReservationStatus.Ready)
                             {
-                            using (Html.BeginForm("Cancel", "Reservations", new { id = r.Id }, FormMethod.Post, new { style = "display:inline;", onsubmit = "return confirm('Cancel this reservation?');" }))
-                            {
-                            @Html.AntiForgeryToken()
-                            <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                                <form action="@Url.Action("Cancel", "Reservations", new { id = r.Id })" method="post" style="display:inline; margin-left:4px;" onsubmit="return confirm('Cancel this reservation?');">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                                </form>
                             }
+
+                            @if (r.Status == LibrarySystem99.Models.ReservationStatus.Fulfilled || r.Status == LibrarySystem99.Models.ReservationStatus.Cancelled)
+                            {
+                                <span class="text-muted">—</span>
                             }
                         </td>
                     </tr>

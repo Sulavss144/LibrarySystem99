@@ -1,13 +1,84 @@
-﻿<td>
-    <span style="color:#f5a623;">
-        @for (int i = 0; i < r.Rating; i++)
-        {
-            <span>&#9733;</span>
-        }
-        @for (int i = r.Rating; i < 5; i++)
-        {
-            <span style="color:#ccc;">&#9733;</span>
-        }
-    </span>
-    (@r.Rating/5)
-</td>
+﻿@model IEnumerable<LibrarySystem99.Models.BookReview>
+
+@{
+    ViewBag.Title = "Book Reviews";
+}
+
+<div class="container">
+    <h2>Moderate Book Reviews</h2>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Info"] != null)
+    {
+        <div class="alert alert-info">@TempData["Info"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    @if (Model != null && Model.Any())
+    {
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>Book</th>
+                    <th>Reviewer</th>
+                    <th>Rating</th>
+                    <th>Review</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var r in Model)
+                {
+                    <tr>
+                        <td>@(r.Book != null ? r.Book.Title : "—")</td>
+                        <td>@(r.User != null ? r.User.Email : "—")</td>
+                        <td style="white-space: nowrap;">
+                            <span style="color:#f5a623;">
+                                @for (int i = 0; i < r.Rating; i++)
+                                {
+                                    <span>&#9733;</span>
+                                }
+                                @for (int i = r.Rating; i < 5; i++)
+                                {
+                                    <span style="color:#ccc;">&#9733;</span>
+                                }
+                            </span>
+                            (@r.Rating/5)
+                        </td>
+                        <td>@r.ReviewText</td>
+                        <td style="white-space: nowrap;">
+                            @r.CreatedDate.ToShortDateString()
+                            @if (r.UpdatedDate.HasValue)
+                            {
+                                <br />
+                                <small class="text-muted">edited @r.UpdatedDate.Value.ToShortDateString()</small>
+                            }
+                        </td>
+                        <td>
+                            <form action="@Url.Action("Delete", "BookReviews", new { id = r.Id })" method="post" style="display:inline;" onsubmit="return confirm('Delete this review?');">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p class="text-muted">No reviews yet.</p>
+    }
+
+    <hr />
+    <p>
+        @Html.ActionLink("« Back to Dashboard", "Index", "Librarian", null, new { @class = "btn btn-default" })
+    </p>
+</div>
