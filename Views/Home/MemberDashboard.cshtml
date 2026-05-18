@@ -1,34 +1,109 @@
-﻿@{
+﻿@model IEnumerable<LibrarySystem99.Models.BorrowingTransaction>
+
+@{
     ViewBag.Title = "Member Dashboard";
+
+    var borrowings = Model ?? Enumerable.Empty<LibrarySystem99.Models.BorrowingTransaction>();
+
+    var totalBorrowed = borrowings.Count();
+    var currentlyBorrowed = borrowings.Count(x => !x.IsReturned);
+    var overdue = borrowings.Count(x => !x.IsReturned && x.DueDate < DateTime.Now);
 }
 
-<div class="container">
-    <div class="jumbotron">
+<main class="member-dashboard-page">
+
+    <div class="member-dashboard-header">
         <h1>Member Dashboard</h1>
-        <p class="lead">Welcome back, @User.Identity.Name. Ready to find your next read?</p>
+        <p>Welcome back, @User.Identity.Name.</p>
     </div>
 
-    <div class="row">
-        <div class="col-md-4">
+    <div class="member-stats-grid">
+        <div class="member-stat-box">
+            <h4>Total Borrowed</h4>
+            <strong>@totalBorrowed</strong>
+        </div>
+
+        <div class="member-stat-box">
+            <h4>Currently Borrowed</h4>
+            <strong>@currentlyBorrowed</strong>
+        </div>
+
+        <div class="member-stat-box">
+            <h4>Overdue</h4>
+            <strong class="danger-text">@overdue</strong>
+        </div>
+    </div>
+
+    <h2 class="section-title">Quick Actions</h2>
+
+    <div class="member-dashboard-grid">
+
+        <div class="member-dashboard-card">
             <h3>Browse Books</h3>
-            <p>Explore the library catalogue, search by title or author, and find your next book.</p>
-            <p><a class="btn btn-default" href="#">Browse Catalogue &raquo;</a></p>
+            <p>Explore the library catalogue and find your next book.</p>
+            <a href="/Books" class="btn member-btn">Browse Catalogue</a>
         </div>
-        <div class="col-md-4">
+
+        <div class="member-dashboard-card">
             <h3>My Borrowings</h3>
-            <p>View books you've currently borrowed, check due dates, and return books online.</p>
-            <p><a class="btn btn-default" href="#">My Borrowings &raquo;</a></p>
+            <p>View books you borrowed, check due dates, and return books.</p>
+            <a href="/Member" class="btn member-btn">My Borrowings</a>
         </div>
-        <div class="col-md-4">
+
+        <div class="member-dashboard-card">
             <h3>My Profile</h3>
-            <p>Update your personal details, change your password, and manage your account.</p>
-            <p><a class="btn btn-default" href="#">View Profile &raquo;</a></p>
+            <p>Update your personal details and manage your account.</p>
+            <a href="/Manage" class="btn member-btn">View Profile</a>
         </div>
+
     </div>
 
-    <hr />
-    <p class="text-muted">
-        <strong>Security note:</strong> This page is protected by <code>[Authorize(Roles = "Member")]</code>.
-        Only users with the Member role can access it. Librarians attempting to reach this URL directly will be redirected to login.
-    </p>
-</div>
+    <h2 class="section-title">My Borrowed Books</h2>
+
+    <table class="table member-books-table">
+        <tr>
+            <th>Book</th>
+            <th>Borrow Date</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+
+        @foreach (var item in borrowings)
+        {
+            <tr>
+                <td>@item.Book.Title</td>
+                <td>@item.BorrowDate</td>
+                <td>@item.DueDate</td>
+                <td>
+                    @if (item.IsReturned)
+                    {
+                        <span class="status-returned">Returned</span>
+                    }
+                    else if (item.DueDate < DateTime.Now)
+                    {
+                        <span class="status-overdue">Overdue</span>
+                    }
+                    else
+                    {
+                        <span class="status-active">Active</span>
+                    }
+                </td>
+                <td>
+                    @if (!item.IsReturned)
+                    {
+                        @Html.ActionLink("Return", "Return", "BorrowingTransactions",
+                            new { id = item.Id },
+                            new { @class = "btn member-btn" })
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+
+    <div class="member-dashboard-note">
+        <strong>Security note:</strong>
+        This page is protected and only accessible to authorised members.
+    </div>
+
+</main>

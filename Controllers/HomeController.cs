@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
+using System.Data.Entity;
 
 namespace LibrarySystem99.Controllers
 {
@@ -53,9 +55,18 @@ namespace LibrarySystem99.Controllers
 
         // GET: /Home/MemberDashboard
         [Authorize(Roles = "Member")]
+        [Authorize(Roles = "Member")]
         public ActionResult MemberDashboard()
         {
-            return View();
+            var context = new ApplicationDbContext();
+            var userId = User.Identity.GetUserId();
+
+            var borrowings = context.BorrowingTransactions
+                .Include(b => b.Book)
+                .Where(b => b.UserId == userId)
+                .ToList();
+
+            return View(borrowings);
         }
     }
 }
