@@ -5,33 +5,32 @@ namespace LibrarySystem99.Models
 {
     public class ReportsViewModel
     {
-        // 1. Overdue books
-        public List<BorrowingTransaction> OverdueBooks { get; set; }
-
-        // 2. Most popular books (by borrow count)
-        public List<PopularBookRow> PopularBooks { get; set; }
-
-        // 3. Member activity
-        public List<MemberActivityRow> TopBorrowers { get; set; }
-        public List<ApplicationUser> InactiveMembers { get; set; }
-
-        // 4. Fines summary
-        public decimal TotalCollected { get; set; }
-        public decimal TotalUnpaid { get; set; }
-        public List<MemberFineRow> FinesByMember { get; set; }
-
-        // 5. Borrowing trends
-        public List<BorrowTrendRow> BorrowsPerDay { get; set; }
-        public List<BorrowTrendRow> BorrowsPerMonth { get; set; }
-
-        // 6. Inventory status
-        public List<Book> LowStockBooks { get; set; }
-        public List<Book> FullyBorrowedBooks { get; set; }
-
-        // Top-level KPIs
+        // ===== Shared Dashboard Data =====
         public int TotalBooks { get; set; }
         public int TotalMembers { get; set; }
         public int TotalBorrows { get; set; }
+
+        // ===== Homepage + Dashboards =====
+        public List<Book> NewArrivals { get; set; } = new List<Book>();
+        public List<Book> AvailableBooks { get; set; } = new List<Book>();
+        public List<Book> MostBorrowed { get; set; } = new List<Book>();
+
+        // ===== Reports Section =====
+        public List<BorrowingTransaction> OverdueBooks { get; set; } = new List<BorrowingTransaction>();
+        public List<PopularBookRow> PopularBooks { get; set; } = new List<PopularBookRow>();
+        public List<MemberActivityRow> TopBorrowers { get; set; } = new List<MemberActivityRow>();
+        public List<ApplicationUser> InactiveMembers { get; set; } = new List<ApplicationUser>();
+
+        public decimal TotalCollected { get; set; }
+        public decimal TotalUnpaid { get; set; }
+
+        public List<MemberFineRow> FinesByMember { get; set; } = new List<MemberFineRow>();
+
+        public List<BorrowTrendRow> BorrowsPerDay { get; set; } = new List<BorrowTrendRow>();
+        public List<BorrowTrendRow> BorrowsPerMonth { get; set; } = new List<BorrowTrendRow>();
+
+        public List<Book> LowStockBooks { get; set; } = new List<Book>();
+        public List<Book> FullyBorrowedBooks { get; set; } = new List<Book>();
     }
 
     public class PopularBookRow

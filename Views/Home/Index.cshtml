@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Home Page";
 }
 
@@ -27,41 +26,43 @@
             <h2>Librarian Dashboard</h2>
             <p>Librarians can manage library operations through a role-based dashboard.</p>
         </section>
-        <hr />
+    </div>
 
-        <div class="team-table-section">
-            <h3>Project Team Members</h3>
+    <hr />
 
-            <table class="team-table">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Student ID</th>
-                    </tr>
-                </thead>
+    @* ===== DASHBOARD WIDGETS ===== *@
+    @Html.Partial("_DashboardWidgets")
 
-                <tbody>
-                    <tr>
-                        <td>Ashif</td>
-                        <td>20032206</td>
-                    </tr>
+    <hr />
 
-                    <tr>
-                        <td>Ehsan</td>
-                        <td>20032627</td>
-                    </tr>
+    <div class="team-table-section">
+        <h3>Project Team Members</h3>
 
-                    <tr>
-                        <td>Sulav</td>
-                        <td>20032639</td>
-                    </tr>
-
-                    <tr>
-                        <td>Manish</td>
-                        <td>20030726</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <table class="team-table table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Student ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Ashif</td>
+                    <td>20032206</td>
+                </tr>
+                <tr>
+                    <td>Ehsan</td>
+                    <td>20032627</td>
+                </tr>
+                <tr>
+                    <td>Sulav</td>
+                    <td>20032639</td>
+                </tr>
+                <tr>
+                    <td>Manish</td>
+                    <td>20030726</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </main>

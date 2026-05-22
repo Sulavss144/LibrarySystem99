@@ -29,6 +29,10 @@ namespace LibrarySystem99.Models
 
         public string Description { get; set; }
 
+        [Display(Name = "Cover Image URL")]
+        [Url(ErrorMessage = "Please enter a valid URL.")]
+        public string CoverImageUrl { get; set; }
+
         public virtual ICollection<BorrowingTransaction> BorrowingTransactions { get; set; }
 
         public virtual ICollection<Reservation> Reservations { get; set; }

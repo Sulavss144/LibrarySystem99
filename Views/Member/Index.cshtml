@@ -64,6 +64,11 @@
 
     <hr />
 
+    @* ===== DASHBOARD WIDGETS ===== *@
+    @Html.Partial("_DashboardWidgets")
+
+    <hr />
+
     @* My Borrowed Books table *@
     <h3 id="my-borrowings">My Borrowed Books</h3>
 
@@ -89,22 +94,24 @@
                         <td>
                             @if (item.IsReturned)
                             {
-                                <span class="status-returned">Returned</span>
+                                <span style="color:green">Returned</span>
                             }
                             else if (item.DueDate < DateTime.Now)
                             {
-                                <span class="status-overdue">Overdue</span>
+                                <span style="color:red">Overdue</span>
                             }
                             else
                             {
-                                <span class="status-active">Active</span>
+                                <span style="color:blue">Active</span>
                             }
                         </td>
                         <td>
                             @if (!item.IsReturned)
                             {
-                                @Html.ActionLink("Return", "Return", "BorrowingTransactions", new { id = item.Id }, new { @class = "btn btn-warning btn-sm" })
+                                @Html.ActionLink("Return", "Return", "Books", new { id = item.Id }, new { @class = "btn btn-warning btn-sm" })
                             }
+
+                            @Html.ActionLink("Review", "Create", "BookReviews", new { bookId = item.BookId }, new { @class = "btn btn-info btn-sm" })
                         </td>
                     </tr>
                 }
@@ -115,10 +122,5 @@
     {
         <p class="text-muted">You haven't borrowed any books yet. <a href="@Url.Action("Index", "Books")">Browse the catalogue</a> to get started.</p>
     }
-
-    <hr />
-    <p class="text-muted small">
-        <strong>Security note:</strong> This page is protected by <code>[Authorize(Roles = "Member,Librarian,Admin")]</code>.
-    </p>
 
 </div>

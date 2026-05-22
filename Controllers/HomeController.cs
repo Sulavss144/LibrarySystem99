@@ -11,11 +11,12 @@ namespace LibrarySystem99.Controllers
 {
     public class HomeController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
         public ActionResult Index()
         {
             // Seed roles on first visit (idempotent)
-            var context = new ApplicationDbContext();
-            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(db));
 
             if (!roleManager.RoleExists("Librarian"))
             {
@@ -28,7 +29,7 @@ namespace LibrarySystem99.Controllers
             }
 
             // Seed default borrowing policy if none exists
-            PolicyHelper.EnsureDefaultPolicyExists(context);
+            PolicyHelper.EnsureDefaultPolicyExists(db);
 
             // Redirect authenticated users to their role-specific dashboard
             if (User.Identity.IsAuthenticated)
@@ -44,6 +45,9 @@ namespace LibrarySystem99.Controllers
                 }
             }
 
+            // Load shared dashboard widgets (New Arrivals, Most Borrowed, Available)
+            DashboardHelper.LoadCommonData(this, db);
+
             return View();
         }
 
@@ -51,9 +55,9 @@ namespace LibrarySystem99.Controllers
         {
             ViewBag.Message = "Your application description page.";
 
-            using (var db = new ApplicationDbContext())
+            using (var feedbackDb = new ApplicationDbContext())
             {
-                var recentFeedback = db.WebsiteFeedbacks
+                var recentFeedback = feedbackDb.WebsiteFeedbacks
                     .Where(f => f.IsApproved)
                     .OrderByDescending(f => f.CreatedDate)
                     .Take(10)
@@ -85,6 +89,15 @@ namespace LibrarySystem99.Controllers
         public ActionResult MemberDashboard()
         {
             return RedirectToAction("Index", "Member");
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

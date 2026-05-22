@@ -14,6 +14,9 @@ namespace LibrarySystem99.Controllers
 
         public ActionResult Index()
         {
+            // Load shared dashboard widgets (New Arrivals, Most Borrowed, Available)
+            DashboardHelper.LoadCommonData(this, db);
+
             var userId = User.Identity.GetUserId();
 
             var myBooks = db.BorrowingTransactions
@@ -22,7 +25,7 @@ namespace LibrarySystem99.Controllers
                 .OrderByDescending(b => b.BorrowDate)
                 .ToList();
 
-            // KPIs for the dashboard cards
+            // Member-specific KPIs
             ViewBag.TotalBorrowed = myBooks.Count;
             ViewBag.CurrentlyBorrowed = myBooks.Count(b => !b.IsReturned);
             ViewBag.OverdueCount = myBooks.Count(b =>

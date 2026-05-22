@@ -6,120 +6,100 @@
 
 <div class="page-header-box">
     <h2>Library Books</h2>
-    <p>Manage book records, availability, and catalogue information.</p>
+    <p>Browse and manage the library collection</p>
 </div>
 
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">@TempData["Success"]</div>
+}
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+@* ===== SEARCH BAR ===== *@
 <div class="search-box">
     @using (Html.BeginForm("Index", "Books", FormMethod.Get, new { @class = "form-inline" }))
     {
-        <div class="form-group">
-            <input type="text"
-                   name="searchQuery"
-                   value="@ViewBag.SearchQuery"
-                   class="form-control"
-                   placeholder="Search by title or author..." />
-        </div>
-
+        <input type="text" name="searchQuery" value="@ViewBag.SearchQuery" class="form-control" placeholder="Search by title or author..." style="width: 300px;" />
         <button type="submit" class="btn btn-primary">Search</button>
 
         if (!string.IsNullOrWhiteSpace(ViewBag.SearchQuery as string))
         {
             @Html.ActionLink("Clear", "Index", null, new { @class = "btn btn-default" })
-
-            <span class="text-muted search-result-text">
+            <span class="text-muted" style="margin-left:10px;">
                 Showing results for <strong>"@ViewBag.SearchQuery"</strong>
             </span>
         }
     }
 </div>
 
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger">@TempData["Error"]</div>
-}
-
 @if (User.IsInRole("Librarian"))
 {
     <p>
-        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-primary" })
+        @Html.ActionLink("Create New Book", "Create", null, new { @class = "btn btn-primary" })
     </p>
 }
 
-<table class="table books-table">
-    <tr>
-        <th>@Html.DisplayNameFor(model => model.Title)</th>
-        <th>@Html.DisplayNameFor(model => model.Author)</th>
-        <th>@Html.DisplayNameFor(model => model.ISBN)</th>
-        <th>@Html.DisplayNameFor(model => model.Category)</th>
-        <th>@Html.DisplayNameFor(model => model.TotalCopies)</th>
-        <th>@Html.DisplayNameFor(model => model.AvailableCopies)</th>
-        <th>@Html.DisplayNameFor(model => model.Description)</th>
-        <th>Actions</th>
-    </tr>
+<div class="row">
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>@Html.DisplayFor(modelItem => item.Title)</td>
-            <td>@Html.DisplayFor(modelItem => item.Author)</td>
-            <td>@Html.DisplayFor(modelItem => item.ISBN)</td>
-            <td>@Html.DisplayFor(modelItem => item.Category)</td>
-            <td>@Html.DisplayFor(modelItem => item.TotalCopies)</td>
+        <div class="col-md-5">
 
-            <td>
-                @if (item.AvailableCopies > 0)
-                {
-                    <span class="availability available">@item.AvailableCopies</span>
-                }
-                else
-                {
-                    <span class="availability unavailable">0</span>
-                }
-            </td>
+            <div class="book-card">
 
-            <td>@Html.DisplayFor(modelItem => item.Description)</td>
+                @* ===== COVER IMAGE ===== *@
+                <img src="@(string.IsNullOrEmpty(item.CoverImageUrl)
+                        ? "https://via.placeholder.com/200x280/eeeeee/999999?text=No+Cover"
+                        : item.CoverImageUrl)"
+                     class="book-cover"
+                     alt="@item.Title cover" />
 
-            <td class="action-links">
-                @Html.ActionLink("Details", "Details",
-                    new { id = item.Id },
-                    new { @class = "btn btn-info btn-sm" })
+                @* ===== DETAILS ===== *@
+                <h4>@item.Title</h4>
+                <p>@item.Author</p>
+                <p>@item.Category</p>
 
-                @if (User.IsInRole("Librarian"))
-                {
-                    @Html.ActionLink("Edit", "Edit",
-                        new { id = item.Id },
-                        new { @class = "btn btn-warning btn-sm" })
+                <p>
+                    <span class="availability @(item.AvailableCopies > 0 ? "available" : "unavailable")">
+                        @item.AvailableCopies Available
+                    </span>
+                </p>
 
-                    @Html.ActionLink("Delete", "Delete",
-                        new { id = item.Id },
-                        new { @class = "btn btn-danger btn-sm" })
-                }
+                @* ===== ACTIONS ===== *@
+                <div>
 
-                @if (User.IsInRole("Member"))
-                {
-                    if (item.AvailableCopies > 0)
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "btn btn-info btn-sm" })
+
+                    @if (User.IsInRole("Librarian"))
                     {
-                        @Html.ActionLink("Borrow", "Borrow", "Books",
-                            new { id = item.Id },
-                            new { @class = "btn btn-success btn-sm" })
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "btn btn-warning btn-sm" })
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "btn btn-danger btn-sm" })
                     }
-                    else
+
+                    @if (User.IsInRole("Member"))
                     {
-                        using (Html.BeginForm("Create", "Reservations", FormMethod.Post, new { @class = "inline-form" }))
+                        if (item.AvailableCopies > 0)
                         {
-                            @Html.AntiForgeryToken()
-
-                            <input type="hidden" name="bookId" value="@item.Id" />
-
-                            <button type="submit"
-                                    class="btn btn-warning btn-sm"
-                                    title="Reserve this book — you'll be added to the queue">
-                                Reserve
-                            </button>
+                            @Html.ActionLink("Borrow", "Borrow", new { id = item.Id }, new { @class = "btn btn-success btn-sm" })
+                        }
+                        else
+                        {
+                            using (Html.BeginForm("Create", "Reservations", FormMethod.Post, new { @class = "inline-form" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="bookId" value="@item.Id" />
+                                <button class="btn btn-warning btn-sm">Reserve</button>
+                            }
                         }
                     }
-                }
-            </td>
-        </tr>
+
+                </div>
+
+            </div>
+        </div>
     }
-</table>
+
+</div>

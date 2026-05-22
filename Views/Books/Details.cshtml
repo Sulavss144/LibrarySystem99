@@ -7,8 +7,6 @@
 }
 
 <div class="container">
-    <h2>@Model.Title</h2>
-    <p class="lead">by @Model.Author</p>
 
     @if (TempData["Success"] != null)
     {
@@ -19,9 +17,19 @@
         <div class="alert alert-info">@TempData["Info"]</div>
     }
 
-    <div class="panel panel-default">
-        <div class="panel-heading"><h4>Book Information</h4></div>
-        <div class="panel-body">
+    @* ===== BOOK HEADER WITH COVER ===== *@
+    <div class="row" style="margin-bottom: 30px;">
+        <div class="col-md-3 text-center">
+            <img src="@(string.IsNullOrEmpty(Model.CoverImageUrl)
+                    ? "https://via.placeholder.com/250x350/eeeeee/999999?text=No+Cover"
+                    : Model.CoverImageUrl)"
+                 alt="@Model.Title cover"
+                 style="width: 100%; max-width: 250px; height: auto; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);" />
+        </div>
+        <div class="col-md-9">
+            <h2>@Model.Title</h2>
+            <p class="lead">by @Model.Author</p>
+
             <dl class="dl-horizontal">
                 <dt>ISBN:</dt>
                 <dd>@(string.IsNullOrEmpty(Model.ISBN) ? "—" : Model.ISBN)</dd>
@@ -43,26 +51,26 @@
                         <span class="label label-danger">Not available</span>
                     }
                 </dd>
-
-                <dt>Description:</dt>
-                <dd>@(string.IsNullOrEmpty(Model.Description) ? "—" : Model.Description)</dd>
             </dl>
+
+            <h4 style="margin-top: 20px;">Description</h4>
+            <p>@(string.IsNullOrEmpty(Model.Description) ? "—" : Model.Description)</p>
+
+            @* Action buttons *@
+            <p style="margin-top: 25px;">
+                @if (User.IsInRole("Member") && Model.AvailableCopies > 0)
+                {
+                    @Html.ActionLink("Borrow This Book", "Borrow", "Books", new { id = Model.Id }, new { @class = "btn btn-success" })
+                }
+                @if (User.IsInRole("Librarian"))
+                {
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-warning" })
+                    @Html.ActionLink("Delete", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
+                }
+                @Html.ActionLink("« Back to List", "Index", null, new { @class = "btn btn-default" })
+            </p>
         </div>
     </div>
-
-    @* Action buttons *@
-    <p>
-        @if (User.IsInRole("Member") && Model.AvailableCopies > 0)
-        {
-            @Html.ActionLink("Borrow This Book", "Borrow", "Books", new { id = Model.Id }, new { @class = "btn btn-success" })
-        }
-        @if (User.IsInRole("Librarian"))
-        {
-            @Html.ActionLink("Edit", "Edit", new { id = Model.Id }, new { @class = "btn btn-warning" })
-            @Html.ActionLink("Delete", "Delete", new { id = Model.Id }, new { @class = "btn btn-danger" })
-        }
-        @Html.ActionLink("« Back to List", "Index", null, new { @class = "btn btn-default" })
-    </p>
 
     <hr />
 

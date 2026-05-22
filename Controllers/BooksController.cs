@@ -32,7 +32,6 @@ namespace LibrarySystem99.Controllers
         }
 
         // GET: Details
-
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -76,7 +75,7 @@ namespace LibrarySystem99.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include =
-            "Id,Title,Author,ISBN,Category,TotalCopies,AvailableCopies,Description")] Book book)
+            "Id,Title,Author,ISBN,Category,TotalCopies,AvailableCopies,Description,CoverImageUrl")] Book book)
         {
             if (ModelState.IsValid)
             {
@@ -142,7 +141,7 @@ namespace LibrarySystem99.Controllers
 
 
         // =========================================
-        // 🔥 USER BORROWED BOOKS
+        // USER BORROWED BOOKS
         // =========================================
 
         [Authorize(Roles = "Member")]
@@ -191,7 +190,7 @@ namespace LibrarySystem99.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Check for unpaid fines (optional but realistic)
+            // Check for unpaid fines
             var unpaidFines = db.Fines
                 .Where(f => !f.IsPaid && f.BorrowingTransaction.UserId == userId)
                 .Sum(f => (decimal?)f.Amount) ?? 0m;
@@ -273,14 +272,13 @@ namespace LibrarySystem99.Controllers
                 // ===== AUTO-PROMOTE NEXT RESERVATION =====
                 var nextReservation = db.Reservations
                     .Where(r => r.BookId == borrow.BookId && r.Status == ReservationStatus.Waiting)
-                    .OrderBy(r => r.ReservationDate)
+                    .OrderBy(r => r.Id)
                     .FirstOrDefault();
 
                 if (nextReservation != null)
                 {
                     nextReservation.Status = ReservationStatus.Ready;
                     nextReservation.ReadyDate = DateTime.Now;
-                    // Don't decrement AvailableCopies — it's still technically available until fulfilled
                 }
 
                 db.SaveChanges();

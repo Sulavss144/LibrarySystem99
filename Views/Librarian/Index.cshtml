@@ -64,47 +64,52 @@
 
     <hr />
 
+    @* ===== DASHBOARD WIDGETS ===== *@
+    @Html.Partial("_DashboardWidgets")
+
+    <hr />
+
     @* Recent activity *@
     <h3>Recent Borrow Activity</h3>
 
     @if (Model != null && Model.Any())
     {
-       <table class="recent-table">
-           <thead>
-               <tr>
-                   <th>Book</th>
-                   <th>User</th>
-                   <th>Borrow Date</th>
-                   <th>Due Date</th>
-                   <th>Status</th>
-               </tr>
-           </thead>
-           <tbody>
-               @foreach (var item in Model)
-               {
-                   <tr>
-                       <td>@(item.Book != null ? item.Book.Title : "—")</td>
-                       <td>@(item.User != null ? item.User.Email : "—")</td>
-                       <td>@item.BorrowDate</td>
-                       <td>@item.DueDate</td>
-                       <td>
-                           @if (item.IsReturned)
-                           {
-                               <span style="color:green">Returned</span>
-                           }
-                           else if (item.DueDate < DateTime.Now)
-                           {
-                               <span style="color:red">Overdue</span>
-                           }
-                           else
-                           {
-                               <span style="color:orange">Active</span>
-                           }
-                       </td>
-                   </tr>
-               }
-           </tbody>
-       </table>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Book</th>
+                    <th>User</th>
+                    <th>Borrow Date</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@(item.Book != null ? item.Book.Title : "—")</td>
+                        <td>@(item.User != null ? item.User.Email : "—")</td>
+                        <td>@item.BorrowDate</td>
+                        <td>@item.DueDate</td>
+                        <td>
+                            @if (item.IsReturned)
+                            {
+                                <span style="color:green">Returned</span>
+                            }
+                            else if (item.DueDate < DateTime.Now)
+                            {
+                                <span style="color:red">Overdue</span>
+                            }
+                            else
+                            {
+                                <span style="color:orange">Active</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     }
     else
     {
@@ -113,8 +118,8 @@
 
     <hr />
     <p class="text-muted small">
-        <strong>Security note:</strong> This page is protected by <code>[Authorize(Roles = "Librarian,Admin")]</code>.
-        Only users with the Librarian role can access it.
+        <strong>Admin tools:</strong>
+        @Html.ActionLink("Reset library data", "ResetData", "Librarian") (for clearing test data before a demo)
     </p>
 
 </div>

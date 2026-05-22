@@ -210,12 +210,21 @@
     <Compile Include="Migrations\202605180132290_UpgradeRversations.Designer.cs">
       <DependentUpon>202605180132290_UpgradeRversations.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202605220639370_AddCoverImage.cs" />
+    <Compile Include="Migrations\202605220639370_AddCoverImage.Designer.cs">
+      <DependentUpon>202605220639370_AddCoverImage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202605220815242_FixCoverImageColumn.cs" />
+    <Compile Include="Migrations\202605220815242_FixCoverImageColumn.Designer.cs">
+      <DependentUpon>202605220815242_FixCoverImageColumn.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Book.cs" />
     <Compile Include="Models\BookReview.cs" />
     <Compile Include="Models\BorrowingTransaction.cs" />
     <Compile Include="Models\BorrowingPolicy.cs" />
+    <Compile Include="Models\DashboardHelper.cs" />
     <Compile Include="Models\Fine.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -336,6 +345,7 @@
     <Content Include="Views\Shared\_BookReviews.cshtml" />
     <Content Include="Views\Reservations.cshtml" />
     <Content Include="Views\Reservations\Index.cshtml" />
+    <Content Include="Views\Shared\_DashboardWidgets.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -391,6 +401,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202605180132290_UpgradeRversations.resx">
       <DependentUpon>202605180132290_UpgradeRversations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202605220639370_AddCoverImage.resx">
+      <DependentUpon>202605220639370_AddCoverImage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202605220815242_FixCoverImageColumn.resx">
+      <DependentUpon>202605220815242_FixCoverImageColumn.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

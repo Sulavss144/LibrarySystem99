@@ -1,0 +1,101 @@
+﻿@{
+    var newArrivals = ViewBag.NewArrivals as System.Collections.Generic.List<LibrarySystem99.Models.Book>;
+    var mostBorrowed = ViewBag.MostBorrowed as System.Collections.Generic.List<LibrarySystem99.Models.Book>;
+    var availableBooks = ViewBag.AvailableBooks as System.Collections.Generic.List<LibrarySystem99.Models.Book>;
+}
+
+<div class="dashboard-widgets" style="margin-top: 30px;">
+
+    @* ===== NEW ARRIVALS ===== *@
+    <h3>📚 New Arrivals</h3>
+    @if (newArrivals != null && newArrivals.Any())
+    {
+        <div class="row">
+            @foreach (var book in newArrivals)
+            {
+                <div class="col-md-2 col-sm-4 col-xs-6" style="margin-bottom: 20px;">
+                    <a href="@Url.Action("Details", "Books", new { id = book.Id })" style="text-decoration: none; color: inherit;">
+                        <div class="text-center" style="background: white; padding: 10px; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">
+                            <img src="@(string.IsNullOrEmpty(book.CoverImageUrl)
+                                    ? "https://via.placeholder.com/120x170/eeeeee/999999?text=No+Cover"
+                                    : book.CoverImageUrl)"
+                                 alt="@book.Title cover"
+                                 style="width: 100%; max-width: 120px; height: 170px; object-fit: cover; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.15);" />
+                            <strong style="display: block; margin-top: 8px; font-size: 13px;">@book.Title</strong>
+                            <small class="text-muted">@book.Author</small>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-muted">No books yet.</p>
+    }
+
+    <hr />
+
+    @* ===== MOST BORROWED ===== *@
+    <h3>🔥 Most Borrowed</h3>
+    @if (mostBorrowed != null && mostBorrowed.Any())
+    {
+        <div class="row">
+            @foreach (var book in mostBorrowed)
+            {
+                <div class="col-md-2 col-sm-4 col-xs-6" style="margin-bottom: 20px;">
+                    <a href="@Url.Action("Details", "Books", new { id = book.Id })" style="text-decoration: none; color: inherit;">
+                        <div class="text-center" style="background: white; padding: 10px; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); border-top: 3px solid #f0ad4e;">
+                            <img src="@(string.IsNullOrEmpty(book.CoverImageUrl)
+                                    ? "https://via.placeholder.com/120x170/eeeeee/999999?text=No+Cover"
+                                    : book.CoverImageUrl)"
+                                 alt="@book.Title cover"
+                                 style="width: 100%; max-width: 120px; height: 170px; object-fit: cover; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.15);" />
+                            <strong style="display: block; margin-top: 8px; font-size: 13px;">@book.Title</strong>
+                            <small class="text-muted">@book.Author</small>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-muted">No borrowing activity yet.</p>
+    }
+
+    <hr />
+
+    @* ===== AVAILABLE BOOKS ===== *@
+    <h3>✅ Currently Available</h3>
+    @if (availableBooks != null && availableBooks.Any())
+    {
+        <div class="row">
+            @foreach (var book in availableBooks)
+            {
+                <div class="col-md-2 col-sm-4 col-xs-6" style="margin-bottom: 20px;">
+                    <a href="@Url.Action("Details", "Books", new { id = book.Id })" style="text-decoration: none; color: inherit;">
+                        <div class="text-center" style="background: white; padding: 10px; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); border-top: 3px solid #5cb85c;">
+                            <img src="@(string.IsNullOrEmpty(book.CoverImageUrl)
+                                    ? "https://via.placeholder.com/120x170/eeeeee/999999?text=No+Cover"
+                                    : book.CoverImageUrl)"
+                                 alt="@book.Title cover"
+                                 style="width: 100%; max-width: 120px; height: 170px; object-fit: cover; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.15);" />
+                            <strong style="display: block; margin-top: 8px; font-size: 13px;">@book.Title</strong>
+                            <small class="text-muted">@book.Author</small>
+                            <br />
+                            <span class="label label-success" style="margin-top: 4px; display: inline-block;">
+                                @book.AvailableCopies available
+                            </span>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-muted">No books currently available.</p>
+    }
+
+</div>
