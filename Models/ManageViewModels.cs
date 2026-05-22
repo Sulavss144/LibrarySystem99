@@ -33,7 +33,7 @@ namespace LibrarySystem99.Models
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
 
-        [StringLength(500)]
+       
         [Url(ErrorMessage = "Please enter a valid URL.")]
         [Display(Name = "Photo URL")]
         public string PhotoUrl { get; set; }
