@@ -7,10 +7,10 @@
 
     @Styles.Render("~/Content/css")
 
-    <!-- ⭐ Google Font -->
+    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-    <!-- ⭐ Font Awesome -->
+    <!-- Font Awesome -->
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -44,6 +44,7 @@
 
                     @if (User.Identity.IsAuthenticated)
                     {
+                        @* ===== LIBRARIAN NAVIGATION ===== *@
                         if (User.IsInRole("Librarian"))
                         {
                             <li>@Html.ActionLink("Dashboard", "Index", "Librarian", null, new { @class = "nav-link" })</li>
@@ -58,6 +59,7 @@
                             <li>@Html.ActionLink("Reviews", "Index", "BookReviews", null, new { @class = "nav-link" })</li>
                         }
 
+                        @* ===== MEMBER NAVIGATION ===== *@
                         if (User.IsInRole("Member"))
                         {
                             <li>@Html.ActionLink("Dashboard", "Index", "Member", null, new { @class = "nav-link" })</li>

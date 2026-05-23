@@ -44,11 +44,11 @@
                 <dd>
                     @if (Model.AvailableCopies > 0)
                     {
-                        <span class="label label-success">@Model.AvailableCopies available</span>
+                        <span class="availability available">@Model.AvailableCopies available</span>
                     }
                     else
                     {
-                        <span class="label label-danger">Not available</span>
+                        <span class="availability unavailable">Not available</span>
                     }
                 </dd>
             </dl>

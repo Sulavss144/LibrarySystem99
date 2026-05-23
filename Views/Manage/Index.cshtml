@@ -4,7 +4,7 @@
     var user = ViewBag.User as LibrarySystem99.Models.ApplicationUser;
 }
 
-<main aria-labelledby="title">
+<main aria-labelledby="title" class="profile-page">
     <div class="container">
         <h2 id="title">My Profile</h2>
 
@@ -15,28 +15,22 @@
         <p class="text-success">@ViewBag.StatusMessage</p>
 
         @* ===== PROFILE INFORMATION ===== *@
-    <div class="profile-card">
-        <div class="profile-section-header">
-            <h4>Profile Information</h4>
-        </div>
-        <div class="profile-section-body">
-            <div class="row">
-                @if (user != null && !string.IsNullOrEmpty(user.PhotoUrl))
-                {
+        <div class="profile-card">
+            <div class="profile-section-header">
+                <h4>Profile Information</h4>
+            </div>
+            <div class="profile-section-body">
+                <div class="row">
                     <div class="col-md-3 text-center">
-                        <img src="@user.PhotoUrl" alt="Profile Photo"
-                             class="img-circle"
-                             style="width:150px; height:150px; object-fit:cover; border:2px solid #ddd;" />
-                    </div>
-                    <div class="col-md-9">
-                        @Html.Partial("_ProfileDetails", user)
-                    </div>
-                }
-                else
-                {
-                    <div class="col-md-3 text-center">
-                        <div style="width:150px; height:150px; background:#eee; border-radius:50%; display:inline-block; line-height:150px; color:#999;">
-                            No Photo
+                        <div class="profile-photo" style="margin: 0 auto;">
+                            @if (user != null && !string.IsNullOrEmpty(user.PhotoUrl))
+                            {
+                                <img src="@user.PhotoUrl" alt="Profile Photo" />
+                            }
+                            else
+                            {
+                                <span>No Photo</span>
+                            }
                         </div>
                     </div>
                     <div class="col-md-9">
@@ -45,47 +39,46 @@
                             @Html.Partial("_ProfileDetails", user)
                         }
                     </div>
-                }
-            </div>
+                </div>
 
-            <hr />
-            <p>
-                @Html.ActionLink("Edit Profile", "EditProfile", null, new { @class = "btn btn-primary" })
-            </p>
+                <hr />
+                <p>
+                    @Html.ActionLink("Edit Profile", "EditProfile", null, new { @class = "btn btn-primary" })
+                </p>
+            </div>
         </div>
-    </div>
 
         @* ===== ACCOUNT SETTINGS ===== *@
-    <div class="profile-card">
-        <div class="profile-section-header">
-            <h4>Account Settings</h4>
-        </div>
-        <div class="profile-section-body">
-            <dl class="dl-horizontal">
-                <dt>Password:</dt>
-                <dd>
-                    @if (Model.HasPassword)
-                    {
-                        @Html.ActionLink("Change your password", "ChangePassword", null, new { @class = "btn btn-default btn-sm" })
-                    }
-                    else
-                    {
-                        @Html.ActionLink("Create a password", "SetPassword", null, new { @class = "btn btn-default btn-sm" })
-                    }
-                </dd>
+        <div class="profile-card">
+            <div class="profile-section-header">
+                <h4>Account Settings</h4>
+            </div>
+            <div class="profile-section-body">
+                <dl class="dl-horizontal">
+                    <dt>Password:</dt>
+                    <dd>
+                        @if (Model.HasPassword)
+                        {
+                            @Html.ActionLink("Change your password", "ChangePassword", null, new { @class = "btn btn-default btn-sm" })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Create a password", "SetPassword", null, new { @class = "btn btn-default btn-sm" })
+                        }
+                    </dd>
 
-                <dt>External Logins:</dt>
-                <dd>
-                    @Model.Logins.Count registered
-                    @Html.ActionLink("Manage", "ManageLogins", null, new { @class = "btn btn-default btn-sm" })
-                </dd>
+                    <dt>External Logins:</dt>
+                    <dd>
+                        @Model.Logins.Count registered
+                        @Html.ActionLink("Manage", "ManageLogins", null, new { @class = "btn btn-default btn-sm" })
+                    </dd>
 
-                <dt>Two-Factor Auth:</dt>
-                <dd>
-                    <span class="text-muted">Not configured.</span>
-                </dd>
-            </dl>
+                    <dt>Two-Factor Auth:</dt>
+                    <dd>
+                        <span class="text-muted">Not configured.</span>
+                    </dd>
+                </dl>
+            </div>
         </div>
-    </div>
     </div>
 </main>
