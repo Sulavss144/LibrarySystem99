@@ -1,0 +1,73 @@
+* [33m0cefa33[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32msulav[m[33m)[m new css html changes
+* [33m3ceb337[m[33m ([m[1;31morigin/sulav[m[33m)[m added profile url
+* [33ma86b387[m images, book layout changed
+*   [33m26a3879[m Merge pull request #10 from Sulavss144/sulav
+[32m|[m[33m\[m  
+[32m|[m * [33mbb839fd[m editted borrow reviews and added libararian and member to be able to cancle reservation
+[32m|[m[32m/[m  
+* [33ma4d65c5[m Improved frontend design
+* [33m2023045[m Improved frontend design and member/librarian dashboard styling
+* [33m5e0ba58[m Modify team member IDs in README
+* [33m66b905d[m Update README with installation and project details
+* [33m54f2472[m Revise README with project details and features
+* [33m99f616a[m added reservsation controller and Integrated policy with books, fines, borrowing.
+*   [33md5e5daf[m Merge pull request #9 from Sulavss144/sulav
+[34m|[m[35m\[m  
+[34m|[m * [33mbcd2ab5[m added book reviews features
+[34m|[m[34m/[m  
+* [33m16de090[m added website feedback
+*   [33m3d495d6[m Merge pull request #8 from Sulavss144/sulav
+[36m|[m[1;31m\[m  
+[36m|[m * [33m67866ea[m addedReportsFeatures
+[36m|[m[36m/[m  
+* [33made3e86[m added user profile
+*   [33m74d7805[m Merge pull request #7 from Sulavss144/sulav
+[1;32m|[m[1;33m\[m  
+[1;32m|[m * [33m6b1c01a[m made navigation link and changes some views
+[1;32m|[m[1;32m/[m  
+* [33m0ab4d43[m madechanges into librarian dashboard
+[1;33m|[m * [33m89ec129[m[33m ([m[1;31morigin/ehsan-frontend-update[m[33m)[m css done
+[1;33m|[m * [33m5fa6065[m dashboard styling
+[1;33m|[m[1;33m/[m  
+*   [33maef5299[m Merge pull request #6 from Sulavss144/sulav
+[1;35m|[m[1;36m\[m  
+[1;35m|[m * [33m5dcd54d[m added borrowing policies and fines,
+[1;35m|[m[1;35m/[m  
+* [33mdf13983[m Sid changed
+* [33mad938d1[m fixex
+* [33m62f5542[m Table updated
+* [33m657622b[m Updated css
+* [33m1650bfe[m Improved frontend UI & design
+*   [33m559d660[m Merge branch 'master' of https://github.com/Sulavss144/LibrarySystem99
+[31m|[m[32m\[m  
+[31m|[m * [33m08520b9[m Added a condition, librarian to create,edit,delete book, member to borrow and return book
+* [32m|[m [33m5308aab[m Improved frontend UI styling and navbar design
+[32m|[m[32m/[m  
+* [33md529024[m added Books catalog and borrowing transaction logic
+* [33mc4e5492[m addedbook catalog and transaction
+*   [33m5171345[m Merge pull request #5 from Sulavss144/sulavmerge
+[33m|[m[34m\[m  
+[33m|[m * [33m42e80be[m added librarian, member dashboard and forced redirect to login if someone try to bypass url.
+[33m|[m[33m/[m  
+*   [33me87413d[m Merge pull request #4 from Sulavss144/sulav
+[35m|[m[36m\[m  
+[35m|[m * [33mc375455[m added drop downbutton for role, and added role base registration
+[35m|[m *   [33mc111083[m Merge pull request #3 from Sulavss144/sulav-forgotPassword
+[35m|[m [1;31m|[m[1;32m\[m  
+* [1;31m|[m [1;32m\[m   [33m597ed2c[m Merge pull request #3 from Sulavss144/sulav-forgotPassword
+[1;31m|[m[1;32m\[m [1;31m\[m [1;32m\[m  
+[1;31m|[m [1;32m|[m[1;31m/[m [1;32m/[m  
+[1;31m|[m[1;31m/[m[1;32m|[m [1;32m/[m   
+[1;31m|[m [1;32m|[m[1;32m/[m    
+[1;31m|[m * [33mbe57f85[m Add forgot password feature with in-app reset flow
+[1;31m|[m[1;31m/[m  
+*   [33m7673397[m Merge pull request #2 from Sulavss144/sulav
+[1;35m|[m[1;36m\[m  
+[1;35m|[m * [33m8fda003[m added LibraryKOI title on navigation bar
+[1;35m|[m[1;35m/[m  
+*   [33m555cac2[m Merge pull request #1 from Sulavss144/sulav
+[31m|[m[32m\[m  
+[31m|[m * [33md990b67[m just added a  comment to test
+[31m|[m[31m/[m  
+* [33mb4b84db[m Add project files.
+* [33m84e3743[m Add .gitattributes, .gitignore, and README.md.
